@@ -11,7 +11,7 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private float aspect;
-  private Mesh cube, tt1, tt2, tt3, tt4;
+  private Mesh cube, tt1, tt2, tt3, tt4, tt5, tt6;
   private Light light;
     
   private Camera camera;
@@ -94,23 +94,32 @@ public class Arty_GLEventListener implements GLEventListener {
 
   public void initialise(GL3 gl) {
     createRandomNumbers();
+    // cube
     int[] textureId0 = TextureLibrary.loadTexture(gl, "container2.jpg");
     int[] textureId1 = TextureLibrary.loadTexture(gl, "container2_specular.jpg");
 
-    // Walls and floor
+    // floor
     int[] textureId2 = TextureLibrary.loadTexture(gl, "chequerboard.jpg");
     // front wall
     int[] textureId3 = TextureLibrary.loadTexture(gl, "cloud.jpg");
-    // new right wall
-    int[] textureId4 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
-    // new back wall
-    int[] textureId5 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
+    // right wall
+    int[] textureId4 = TextureLibrary.loadTexture(gl, "wall.jpg");
+    // back wall
+    int[] textureId5 = TextureLibrary.loadTexture(gl, "wall.jpg");
+    // left wall
+    int[] textureId6 = TextureLibrary.loadTexture(gl, "wall.jpg");
+    // ceiling
+    int[] textureId7 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
+
+
 
     cube = new Cube(gl, textureId0, textureId1);
     tt1 = new TwoTriangles(gl, textureId2);
     tt2 = new TwoTriangles(gl, textureId3);
     tt3 = new TwoTriangles(gl, textureId4);
     tt4 = new TwoTriangles(gl, textureId5);
+    tt5 = new TwoTriangles(gl, textureId6);
+    tt6 = new TwoTriangles(gl, textureId7);
     light = new Light(gl);
   }
  
@@ -139,16 +148,18 @@ public class Arty_GLEventListener implements GLEventListener {
       cube.render(gl, light, viewPosition, perspective, view);
     }
     
-    tt1.setModelMatrix(getMforTT1());       // possibly changing cube transform each frame
+    tt1.setModelMatrix(getMforTT1());
     tt1.render(gl, light, viewPosition, perspective, view);
-    tt2.setModelMatrix(getMforTT2());       // possibly changing cube transform each frame
+    tt2.setModelMatrix(getMforTT2());
     tt2.render(gl, light, viewPosition, perspective, view);
-    tt1.setModelMatrix(getMforTT3());       // possibly changing cube transform each frame
-    tt1.render(gl, light, viewPosition, perspective, view);
-    tt3.setModelMatrix(getMforTT4());       // possibly changing cube transform each frame
+    tt3.setModelMatrix(getMforTT3());
     tt3.render(gl, light, viewPosition, perspective, view);
-    tt4.setModelMatrix(getMforTT5());       // possibly changing cube transform each frame
+    tt4.setModelMatrix(getMforTT4());
     tt4.render(gl, light, viewPosition, perspective, view); 
+    tt5.setModelMatrix(getMforTT5()); 
+    tt5.render(gl, light, viewPosition, perspective, view);
+    tt6.setModelMatrix(getMforTT6()); 
+    tt6.render(gl, light, viewPosition, perspective, view);
   }
   
   private void updateLightColour() {
@@ -194,6 +205,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
   
   // As the transforms do not change over time for this object, they could be stored once rather than continually being calculated
+  // floor
   private Mat4 getMforTT1() {
     float size = 16f;
     Mat4 model = new Mat4(1);
@@ -201,7 +213,7 @@ public class Arty_GLEventListener implements GLEventListener {
     return model;
   }
   
-  // As the transforms do not change over time for this object, they could be stored once rather than continually being calculated
+  // front wall
   private Mat4 getMforTT2() {
     float size = 16f;
     Mat4 model = new Mat4(1);
@@ -211,6 +223,7 @@ public class Arty_GLEventListener implements GLEventListener {
     return model;
   }
 
+  // left wall
   private Mat4 getMforTT3() {
     float size = 16f;
     Mat4 model = new Mat4(1);
@@ -221,6 +234,7 @@ public class Arty_GLEventListener implements GLEventListener {
     return model;
   }
 
+  // right wall
   private Mat4 getMforTT4() {
     float size = 16f;
     Mat4 model = new Mat4(1);
@@ -231,6 +245,7 @@ public class Arty_GLEventListener implements GLEventListener {
     return model;
   }
 
+  // back wall
   private Mat4 getMforTT5() {
     float size = 16f;
     Mat4 model = new Mat4(1);
@@ -238,6 +253,16 @@ public class Arty_GLEventListener implements GLEventListener {
     model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
     model = Mat4.multiply(Mat4Transform.rotateAroundY(180), model);
     model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,size*0.5f), model);
+    return model;
+  }
+
+  // ceiling
+  private Mat4 getMforTT6() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size,0), model);
     return model;
   }
   
