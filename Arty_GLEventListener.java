@@ -11,7 +11,7 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private float aspect;
-  private Mesh cube, tt1, tt2;
+  private Mesh cube, tt1, tt2, tt3;
   private Light light;
     
   private Camera camera;
@@ -99,9 +99,10 @@ public class Arty_GLEventListener implements GLEventListener {
 
     // Walls and floor
     int[] textureId2 = TextureLibrary.loadTexture(gl, "chequerboard.jpg");
+    // front wall
     int[] textureId3 = TextureLibrary.loadTexture(gl, "cloud.jpg");
     // new
-    int[] textureId4 = TextureLibrary.loadTexture(gl, "cloud.jpg");
+    int[] textureId4 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
 
     cube = new Cube(gl, textureId0, textureId1);
     tt1 = new TwoTriangles(gl, textureId2);
@@ -219,9 +220,9 @@ public class Arty_GLEventListener implements GLEventListener {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
-    model = Mat4.multiply(Mat4Transform.rotateAroundY(90), model);
-    model = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), model);
-    model = Mat4.multiply(Mat4Transform.translate(-size*0.5f,size*0.5f,0), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(size*0.5f,size*0.5f,0), model);
     return model;
   }
   
