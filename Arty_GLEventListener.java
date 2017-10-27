@@ -11,7 +11,7 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
   private float aspect;
-  private Mesh cube, tt1, tt2, tt3;
+  private Mesh cube, tt1, tt2, tt3, tt4;
   private Light light;
     
   private Camera camera;
@@ -101,13 +101,16 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId2 = TextureLibrary.loadTexture(gl, "chequerboard.jpg");
     // front wall
     int[] textureId3 = TextureLibrary.loadTexture(gl, "cloud.jpg");
-    // new
+    // new right wall
     int[] textureId4 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
+    // new back wall
+    int[] textureId5 = TextureLibrary.loadTexture(gl, "wattBook.jpg");
 
     cube = new Cube(gl, textureId0, textureId1);
     tt1 = new TwoTriangles(gl, textureId2);
     tt2 = new TwoTriangles(gl, textureId3);
     tt3 = new TwoTriangles(gl, textureId4);
+    tt4 = new TwoTriangles(gl, textureId5);
     light = new Light(gl);
   }
  
@@ -143,7 +146,9 @@ public class Arty_GLEventListener implements GLEventListener {
     tt1.setModelMatrix(getMforTT3());       // possibly changing cube transform each frame
     tt1.render(gl, light, viewPosition, perspective, view);
     tt3.setModelMatrix(getMforTT4());       // possibly changing cube transform each frame
-    tt3.render(gl, light, viewPosition, perspective, view); 
+    tt3.render(gl, light, viewPosition, perspective, view);
+    tt4.setModelMatrix(getMforTT5());       // possibly changing cube transform each frame
+    tt4.render(gl, light, viewPosition, perspective, view); 
   }
   
   private void updateLightColour() {
@@ -223,6 +228,16 @@ public class Arty_GLEventListener implements GLEventListener {
     model = Mat4.multiply(Mat4Transform.rotateAroundZ(90), model);
     model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
     model = Mat4.multiply(Mat4Transform.translate(size*0.5f,size*0.5f,0), model);
+    return model;
+  }
+
+  private Mat4 getMforTT5() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundY(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,size*0.5f), model);
     return model;
   }
   
