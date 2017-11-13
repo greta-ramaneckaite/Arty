@@ -9,11 +9,13 @@ public class Light {
   private Vec3 position;
   private Mat4 model;
   private Shader shader;
+  private Camera camera;
+  private Mat4 perspective;
     
   public Light(GL3 gl) {
     material = new Material();
-    material.setAmbient(0.2f, 0.2f, 0.2f);
-    material.setDiffuse(0.5f, 0.5f, 0.5f);
+    material.setAmbient(0.5f, 0.5f, 0.5f);
+    material.setDiffuse(0.8f, 0.8f, 0.8f);
     material.setSpecular(1.0f, 1.0f, 1.0f);
     position = new Vec3(3f,2f,1f);
     model = new Mat4(1);
@@ -45,12 +47,20 @@ public class Light {
     return material;
   }
   
-  public void render(GL3 gl, Mat4 perspective, Mat4 view) {
+  public void setCamera(Camera camera) {
+    this.camera = camera;
+  }
+  
+  public void setPerspective(Mat4 perspective) {
+    this.perspective = perspective;
+  }
+  
+  public void render(GL3 gl) { //, Mat4 perspective, Mat4 view) {
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(0.3f,0.3f,0.3f), model);
     model = Mat4.multiply(Mat4Transform.translate(position), model);
     
-    Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(view, model));
+    Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(camera.getViewMatrix(), model));
     
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());

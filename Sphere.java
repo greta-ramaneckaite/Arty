@@ -3,13 +3,14 @@ import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 
-public class Cube extends Mesh {
+public class Sphere extends Mesh {
 
   private int[] textureId1; 
   private int[] textureId2; 
   
-  public Cube(GL3 gl, int[] textureId1, int[] textureId2) {
+  public Sphere(GL3 gl, int[] textureId1, int[] textureId2) {
     super(gl);
+    createVertices();
     super.vertices = this.vertices;
     super.indices = this.indices;
     this.textureId1 = textureId1;
@@ -65,49 +66,54 @@ public class Cube extends Mesh {
   /* THE DATA
    */
   // anticlockwise/counterclockwise ordering
+ 
   
-   private float[] vertices = new float[] {  // x,y,z, nx,ny,nz, s,t
-      -0.5f, -0.5f, -0.5f,  -1, 0, 0,  0.0f, 0.0f,  // 0
-      -0.5f, -0.5f,  0.5f,  -1, 0, 0,  1.0f, 0.0f,  // 1
-      -0.5f,  0.5f, -0.5f,  -1, 0, 0,  0.0f, 1.0f,  // 2
-      -0.5f,  0.5f,  0.5f,  -1, 0, 0,  1.0f, 1.0f,  // 3
-       0.5f, -0.5f, -0.5f,   1, 0, 0,  1.0f, 0.0f,  // 4
-       0.5f, -0.5f,  0.5f,   1, 0, 0,  0.0f, 0.0f,  // 5
-       0.5f,  0.5f, -0.5f,   1, 0, 0,  1.0f, 1.0f,  // 6
-       0.5f,  0.5f,  0.5f,   1, 0, 0,  0.0f, 1.0f,  // 7
+  private float[] vertices;
+  private int[] indices;
 
-      -0.5f, -0.5f, -0.5f,  0,0,-1,  1.0f, 0.0f,  // 8
-      -0.5f, -0.5f,  0.5f,  0,0,1,   0.0f, 0.0f,  // 9
-      -0.5f,  0.5f, -0.5f,  0,0,-1,  1.0f, 1.0f,  // 10
-      -0.5f,  0.5f,  0.5f,  0,0,1,   0.0f, 1.0f,  // 11
-       0.5f, -0.5f, -0.5f,  0,0,-1,  0.0f, 0.0f,  // 12
-       0.5f, -0.5f,  0.5f,  0,0,1,   1.0f, 0.0f,  // 13
-       0.5f,  0.5f, -0.5f,  0,0,-1,  0.0f, 1.0f,  // 14
-       0.5f,  0.5f,  0.5f,  0,0,1,   1.0f, 1.0f,  // 15
+  private void createVertices() {
+    int XLONG = 30;
+    int YLAT = 30;
+    double r = 0.5;
+    int step = 8;
+    //float[] 
+    vertices = new float[XLONG*YLAT*step];
+    for (int j = 0; j<YLAT; ++j) {
+      double b = Math.toRadians(-90+180*(double)(j)/(YLAT-1));
+      for (int i = 0; i<XLONG; ++i) {
+        double a = Math.toRadians(360*(double)(i)/(XLONG-1));
+        double z = Math.cos(b) * Math.cos(a);
+        double x = Math.cos(b) * Math.sin(a);
+        double y = Math.sin(b);
+        vertices[j*XLONG*step+i*step+0] = (float)(r*x);
+        vertices[j*XLONG*step+i*step+1] = (float)(r*y);
+        vertices[j*XLONG*step+i*step+2] = (float)(r*z); 
+        vertices[j*XLONG*step+i*step+3] = (float)x;
+        vertices[j*XLONG*step+i*step+4] = (float)y;
+        vertices[j*XLONG*step+i*step+5] = (float)z;   
+        vertices[j*XLONG*step+i*step+6] = (float)(i)/(float)(XLONG-1);
+        vertices[j*XLONG*step+i*step+7] = (float)(j)/(float)(YLAT-1);        
+      }
+    }
+    //for (int i=0; i<vertices.length; i+=step) {
+    //  System.out.println(vertices[i]+", "+vertices[i+1]+", "+vertices[i+2]);
+    //}
 
-      -0.5f, -0.5f, -0.5f,  0,-1,0,  0.0f, 0.0f,  // 16
-      -0.5f, -0.5f,  0.5f,  0,-1,0,  0.0f, 1.0f,  // 17
-      -0.5f,  0.5f, -0.5f,  0,1,0,   0.0f, 1.0f,  // 18
-      -0.5f,  0.5f,  0.5f,  0,1,0,   0.0f, 0.0f,  // 19
-       0.5f, -0.5f, -0.5f,  0,-1,0,  1.0f, 0.0f,  // 20
-       0.5f, -0.5f,  0.5f,  0,-1,0,  1.0f, 1.0f,  // 21
-       0.5f,  0.5f, -0.5f,  0,1,0,   1.0f, 1.0f,  // 22
-       0.5f,  0.5f,  0.5f,  0,1,0,   1.0f, 0.0f   // 23
-   };
-     
-   private int[] indices =  new int[] {
-      0,1,3, // x -ve 
-      3,2,0, // x -ve
-      4,6,7, // x +ve
-      7,5,4, // x +ve
-      9,13,15, // z +ve
-      15,11,9, // z +ve
-      8,10,14, // z -ve
-      14,12,8, // z -ve
-      16,20,21, // y -ve
-      21,17,16, // y -ve
-      23,22,18, // y +ve
-      18,19,23  // y +ve
-  };
+    indices = new int[(XLONG-1)*(YLAT-1)*6];
+    for (int j = 0; j<YLAT-1; ++j) {
+      for (int i = 0; i<XLONG-1; ++i) {
+        indices[j*(XLONG-1)*6+i*6+0] = j*XLONG+i;
+        indices[j*(XLONG-1)*6+i*6+1] = j*XLONG+i+1;
+        indices[j*(XLONG-1)*6+i*6+2] = (j+1)*XLONG+i+1;
+        indices[j*(XLONG-1)*6+i*6+3] = j*XLONG+i;
+        indices[j*(XLONG-1)*6+i*6+4] = (j+1)*XLONG+i+1;
+        indices[j*(XLONG-1)*6+i*6+5] = (j+1)*XLONG+i;
+      }
+    }
+    //for (int i=0; i<indices.length; i+=3) {
+    //  System.out.println(indices[i]+", "+indices[i+1]+", "+indices[i+2]);
+    //}
 
+  }
+  
 }

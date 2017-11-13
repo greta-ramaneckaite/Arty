@@ -1,19 +1,19 @@
 import gmaths.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.JFrame;
 import com.jogamp.opengl.*;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class Arty extends JFrame implements ActionListener {
+public class Arty extends JFrame {
   
   private static final int WIDTH = 1024;
   private static final int HEIGHT = 768;
   private static final Dimension dimension = new Dimension(WIDTH, HEIGHT);
   private GLCanvas canvas;
-  private Arty_GLEventListener glEventListener;
-  private final FPSAnimator animator; 
+  private GLEventListener glEventListener;
+  private final FPSAnimator animator;
   private Camera camera;
 
   public static void main(String[] args) {
@@ -28,12 +28,12 @@ public class Arty extends JFrame implements ActionListener {
     GLCapabilities glcapabilities = new GLCapabilities(GLProfile.get(GLProfile.GL3));
     canvas = new GLCanvas(glcapabilities);
     camera = new Camera(new Vec3(4f,12f,18f), Camera.DEFAULT_TARGET, Camera.DEFAULT_UP);
-    glEventListener = new Arty_GLEventListener(camera);
+    glEventListener = new M04robot_GLEventListener(camera);
     canvas.addGLEventListener(glEventListener);
     canvas.addMouseMotionListener(new MyMouseInput(camera));
     canvas.addKeyListener(new MyKeyboardInput(camera));
     getContentPane().add(canvas, BorderLayout.CENTER);
-    
+
     JMenuBar menuBar=new JMenuBar();
     this.setJMenuBar(menuBar);
       JMenu fileMenu = new JMenu("File");
@@ -41,7 +41,7 @@ public class Arty extends JFrame implements ActionListener {
         quitItem.addActionListener(this);
         fileMenu.add(quitItem);
     menuBar.add(fileMenu);
-    
+
     JPanel p = new JPanel();
       JButton b = new JButton("camera X");
       b.addActionListener(this);
@@ -68,7 +68,8 @@ public class Arty extends JFrame implements ActionListener {
       b.addActionListener(this);
       p.add(b);
     this.add(p, BorderLayout.SOUTH);
-    
+
+
     addWindowListener(new WindowAdapter() {
       public void windowClosing(WindowEvent e) {
         animator.stop();
@@ -81,6 +82,29 @@ public class Arty extends JFrame implements ActionListener {
     animator.start();
   }
   
+}
+
+
+class MyKeyboardInput extends KeyAdapter  {
+  private Camera camera;
+  
+  public MyKeyboardInput(Camera camera) {
+    this.camera = camera;
+  }
+  
+  public void keyPressed(KeyEvent e) {
+    Camera.Movement m = Camera.Movement.NO_MOVEMENT;
+    switch (e.getKeyCode()) {
+      case KeyEvent.VK_LEFT:  m = Camera.Movement.LEFT;  break;
+      case KeyEvent.VK_RIGHT: m = Camera.Movement.RIGHT; break;
+      case KeyEvent.VK_UP:    m = Camera.Movement.UP;    break;
+      case KeyEvent.VK_DOWN:  m = Camera.Movement.DOWN;  break;
+      case KeyEvent.VK_A:  m = Camera.Movement.FORWARD;  break;
+      case KeyEvent.VK_Z:  m = Camera.Movement.BACK;  break;
+    }
+    camera.keyboardInput(m);
+  }
+
   public void actionPerformed(ActionEvent e) {
     if (e.getActionCommand().equalsIgnoreCase("camera X")) {
       camera.setCamera(Camera.CameraType.X);
@@ -110,28 +134,6 @@ public class Arty extends JFrame implements ActionListener {
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);
-  }
-  
-}
- 
-class MyKeyboardInput extends KeyAdapter  {
-  private Camera camera;
-  
-  public MyKeyboardInput(Camera camera) {
-    this.camera = camera;
-  }
-  
-  public void keyPressed(KeyEvent e) {
-    Camera.Movement m = Camera.Movement.NO_MOVEMENT;
-    switch (e.getKeyCode()) {
-      case KeyEvent.VK_LEFT:  m = Camera.Movement.LEFT;  break;
-      case KeyEvent.VK_RIGHT: m = Camera.Movement.RIGHT; break;
-      case KeyEvent.VK_UP:    m = Camera.Movement.UP;    break;
-      case KeyEvent.VK_DOWN:  m = Camera.Movement.DOWN;  break;
-      case KeyEvent.VK_A:  m = Camera.Movement.FORWARD;  break;
-      case KeyEvent.VK_Z:  m = Camera.Movement.BACK;  break;
-    }
-    camera.keyboardInput(m);
   }
 }
 

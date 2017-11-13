@@ -18,7 +18,11 @@ public abstract class Mesh {
   protected Material material;
   protected Shader shader;
   protected Mat4 model;
-    
+  
+  protected Camera camera;
+  protected Mat4 perspective;
+  protected Light light;
+  
   public Mesh(GL3 gl) {
     material = new Material();
     model = new Mat4(1);
@@ -26,6 +30,18 @@ public abstract class Mesh {
   
   public void setModelMatrix(Mat4 m) {
     model = m;
+  }
+  
+  public void setCamera(Camera camera) {
+    this.camera = camera;
+  }
+  
+  public void setPerspective(Mat4 perspective) {
+    this.perspective = perspective;
+  }
+  
+  public void setLight(Light light) {
+    this.light = light;
   }
   
   public void dispose(GL3 gl) {
@@ -72,6 +88,23 @@ public abstract class Mesh {
     gl.glBindVertexArray(0);
   }
   
-  public abstract void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
-
+  // public abstract void display(int indent);
+  
+  public abstract void render(GL3 gl, Mat4 model); 
+  
+  public void render(GL3 gl) {
+    render(gl, model);
+  }
+  
+  //public abstract void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
+  /*public void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
+    setViewPosition(viewPosition);
+    setView(view);
+    setPerspective(perspective);
+    setLight(light);
+    render(gl, this.model);
+  }
+  */
+  
+  
 }

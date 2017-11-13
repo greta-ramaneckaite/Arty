@@ -6,29 +6,29 @@ import com.jogamp.opengl.*;
 public class TwoTriangles extends Mesh {
   
   private int[] textureId; 
-  
+
   public TwoTriangles(GL3 gl, int[] textureId) {
     super(gl);
     super.vertices = this.vertices;
     super.indices = this.indices;
     this.textureId = textureId;
-    material.setAmbient(0.0f, 0.5f, 0.81f);
-    material.setDiffuse(0.0f, 0.5f, 0.81f);
-    material.setSpecular(0.3f, 0.3f, 0.3f);
+    material.setAmbient(1f, 1f, 1f);
+    material.setDiffuse(1f, 1f, 1f);
+    material.setSpecular(0.5f, 0.5f, 0.5f);
     material.setShininess(32.0f);
-    shader = new Shader(gl, "vs_tt_10.txt", "fs_tt_10.txt");
+    shader = new Shader(gl, "vs_tt_05.txt", "fs_tt_05.txt");
     fillBuffers(gl);
   }
 
-  public void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
-    Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(view, model));
+  public void render(GL3 gl, Mat4 model) { 
+    Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(camera.getViewMatrix(), model));
     
     shader.use(gl);
     
     shader.setFloatArray(gl, "model", model.toFloatArrayForGLSL());
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
     
-    shader.setVec3(gl, "viewPos", viewPosition);
+    shader.setVec3(gl, "viewPos", camera.getPosition());
 
     shader.setVec3(gl, "light.position", light.getPosition());
     shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
