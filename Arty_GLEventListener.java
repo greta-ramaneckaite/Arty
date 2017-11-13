@@ -156,7 +156,12 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
     int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/wattBook.jpg");
     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
-    
+
+    int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
+    int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
+
+
+
     // make meshes
     floor = new TwoTriangles(gl, textureId0);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));  
