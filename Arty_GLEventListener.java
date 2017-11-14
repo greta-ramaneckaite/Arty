@@ -187,6 +187,8 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode wristShape = new MeshNode("Cube(wrist)", cube);
     MeshNode palmShape = new MeshNode("Cube(palm)", cube);
     MeshNode pinkyProxShape = new MeshNode("Cube(pinky proximal)", cube);
+    MeshNode pinkyMiddleShape = new MeshNode("Cube(pinky middle)", cube);
+    MeshNode pinkyDisShape = new MeshNode("Cube(pinky distal)", cube);
     
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
@@ -200,6 +202,9 @@ public class Arty_GLEventListener implements GLEventListener {
     NameNode wrist = new NameNode("wrist");
     NameNode palm = new NameNode("palm");
     NameNode pinkyProx = new NameNode("pinky proximal");
+    NameNode pinkyMiddle = new NameNode("pinky middle");
+    NameNode pinkyDis = new NameNode("pinky distal");
+
     
     // float bodyHeight = 3f;
     // float bodyWidth = 2f;
@@ -247,6 +252,17 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode pinkyProxTransform = new TransformNode("pinky proximal transform", m);
 
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 3),palmHeight + wristHeight + pinkyProxHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyMiddleHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode pinkyMiddleTransform = new TransformNode("pinky middle transform", m);
+
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 3),palmHeight + wristHeight + pinkyProxHeight + pinkyMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyDisHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode pinkyDisTransform = new TransformNode("pinky distal transform", m);
 
      
     // m = new Mat4(1);   
@@ -320,6 +336,12 @@ public class Arty_GLEventListener implements GLEventListener {
             palm.addChild(pinkyProx);
               pinkyProx.addChild(pinkyProxTransform);
                 pinkyProxTransform.addChild(pinkyProxShape);
+            palm.addChild(pinkyMiddle);
+              pinkyMiddle.addChild(pinkyMiddleTransform);
+                pinkyMiddleTransform.addChild(pinkyMiddleShape);
+            palm.addChild(pinkyDis);
+              pinkyDis.addChild(pinkyDisTransform);
+                pinkyDisTransform.addChild(pinkyDisShape);
 
 
     hand.update();
