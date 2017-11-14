@@ -198,6 +198,9 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode indexProxShape = new MeshNode("Cube(index proximal)", cube);
     MeshNode indexMiddleShape = new MeshNode("Cube(index middle)", cube);
     MeshNode indexDisShape = new MeshNode("Cube(index distal)", cube);
+    MeshNode thumbProxShape = new MeshNode("Cube(thumb proximal)", cube);
+    MeshNode thumbMiddleShape = new MeshNode("Cube(thumb middle)", cube);
+    MeshNode thumbDisShape = new MeshNode("Cube(thumb distal)", cube);
     
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
@@ -222,6 +225,9 @@ public class Arty_GLEventListener implements GLEventListener {
     NameNode indexProx = new NameNode("index proximal");
     NameNode indexMiddle = new NameNode("index middle");
     NameNode indexDis = new NameNode("index distal");
+    NameNode thumbProx = new NameNode("thumb proximal");
+    NameNode thumbMiddle = new NameNode("thumb middle");
+    NameNode thumbDis = new NameNode("thumb distal");
 
     
     // float bodyHeight = 3f;
@@ -258,6 +264,10 @@ public class Arty_GLEventListener implements GLEventListener {
     float indexProxHeight = 1.1f;
     float indexMiddleHeight = 1.1f;
     float indexDisHeight = 1.1f;
+
+    float thumbWidth = 1f;
+    float thumbHeight = 0.5f;
+    float thumbDepth = 0.5f;
 
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
@@ -360,6 +370,27 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexDisHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexDisTransform = new TransformNode("index distal transform", m);
+
+    // thumb proximal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth-thumbWidth,palmHeight+thumbHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
+
+    // thumb middle
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth,palmHeight+thumbHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbMiddleTransform = new TransformNode("thumb middle transform", m);
+
+    // thumb distal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth+thumbWidth,palmHeight+thumbHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbDisTransform = new TransformNode("thumb distal transform", m);
 
     // m = new Mat4(1);   
     // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
@@ -465,6 +496,15 @@ public class Arty_GLEventListener implements GLEventListener {
                         indexMiddle.addChild(indexDis);
                           indexDis.addChild(indexDisTransform);
                             indexDisTransform.addChild(indexDisShape); // index distal
+            palm.addChild(thumbProx);
+              thumbProx.addChild(thumbProxTransform);
+                thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                  thumbProx.addChild(thumbMiddle);
+                    thumbMiddle.addChild(thumbMiddleTransform);
+                      thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                        thumbMiddle.addChild(thumbDis);
+                          thumbDis.addChild(thumbDisTransform);
+                            thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
