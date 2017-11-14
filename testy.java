@@ -112,25 +112,25 @@ public class Arty_GLEventListener implements GLEventListener {
   }
  
   private void updateMove() {
-    handMoveTranslate.setTransform(Mat4Transform.translate(xPosition,0,0));
-    handMoveTranslate.update();
+    robotMoveTranslate.setTransform(Mat4Transform.translate(xPosition,0,0));
+    robotMoveTranslate.update();
   }
   
-  public void loweredArms() {
-    stopAnimation();
-    // leftArmRotate.setTransform(Mat4Transform.rotateAroundX(180));
-    // leftArmRotate.update();
-    // rightArmRotate.setTransform(Mat4Transform.rotateAroundX(180));
-    // rightArmRotate.update();    
-  }
+  // public void loweredArms() {
+  //   stopAnimation();
+  //   leftArmRotate.setTransform(Mat4Transform.rotateAroundX(180));
+  //   leftArmRotate.update();
+  //   rightArmRotate.setTransform(Mat4Transform.rotateAroundX(180));
+  //   rightArmRotate.update();    
+  // }
    
-  public void raisedArms() {
-    stopAnimation();
-    // leftArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
-    // leftArmRotate.update();
-    // rightArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
-    // rightArmRotate.update();    
-  }
+  // public void raisedArms() {
+  //   stopAnimation();
+  //   leftArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
+  //   leftArmRotate.update();
+  //   rightArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
+  //   rightArmRotate.update();    
+  // }
   
   // ***************************************************
   /* THE SCENE
@@ -140,12 +140,13 @@ public class Arty_GLEventListener implements GLEventListener {
 
   private Camera camera;
   private Mat4 perspective;
-  private Mesh floor, sphere, cube, cube2;
+  private Mesh floor, frontWall, rightWall, leftWall, backWall, ceiling, sphere, cube, cube2;
   private Light light;
-  private SGNode hand;
+  private SGNode robot, hand;
   
   private float xPosition = 0;
-  private TransformNode translateX, handMoveTranslate; //rotations go here
+  private TransformNode translateX, robotMoveTranslate, leftArmRotate, rightArmRotate;
+  private TransformNode handMoveTranslate;
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
@@ -156,10 +157,29 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
     int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/wattBook.jpg");
     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
-    
+
+    int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
+    int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
+
+
+
     // make meshes
     floor = new TwoTriangles(gl, textureId0);
-    floor.setModelMatrix(Mat4Transform.scale(16,1,16));   
+    floor.setModelMatrix(Mat4Transform.scale(16,1,16));  
+
+      // newwwww
+    frontWall = new TwoTriangles(gl, textureId0);
+    frontWall.setModelMatrix(getMforTT2());
+    rightWall = new TwoTriangles(gl, textureId0);
+    rightWall.setModelMatrix(getMforTT4());
+    leftWall = new TwoTriangles(gl, textureId0);
+    leftWall.setModelMatrix(getMforTT3());
+    backWall = new TwoTriangles(gl, textureId0);
+    backWall.setModelMatrix(getMforTT5());
+    ceiling = new TwoTriangles(gl, textureId0);
+    ceiling.setModelMatrix(getMforTT6());
+
+
     sphere = new Sphere(gl, textureId1, textureId2);
     cube = new Cube(gl, textureId3, textureId4);
     cube2 = new Cube(gl, textureId5, textureId6);
@@ -169,6 +189,19 @@ public class Arty_GLEventListener implements GLEventListener {
     
     floor.setLight(light);
     floor.setCamera(camera);
+
+    // room details
+    frontWall.setLight(light);
+    frontWall.setCamera(camera);
+    rightWall.setLight(light);
+    rightWall.setCamera(camera);
+    leftWall.setLight(light);
+    leftWall.setCamera(camera);
+    backWall.setLight(light);
+    backWall.setCamera(camera);
+    ceiling.setLight(light);
+    ceiling.setCamera(camera);
+
     sphere.setLight(light);
     sphere.setCamera(camera);
     cube.setLight(light);
@@ -184,9 +217,25 @@ public class Arty_GLEventListener implements GLEventListener {
     // MeshNode leftLegShape = new MeshNode("Cube(leftleg)", cube);
     // MeshNode rightLegShape = new MeshNode("Cube(rightleg)", cube);
 
+
     MeshNode wristShape = new MeshNode("Cube(wrist)", cube);
     MeshNode palmShape = new MeshNode("Cube(palm)", cube);
-    
+    MeshNode thumbProxShape = new MeshNode("Cube(thumb proximal)", cube);
+    MeshNode thumbMiddleShape = new MeshNode("Cube(thumb middle)", cube);
+    MeshNode thumbDisShape = new MeshNode("Cube(thumb distal)", cube);
+    MeshNode indexProxShape = new MeshNode("Cube(index proximal)", cube);
+    MeshNode indexMiddleShape = new MeshNode("Cube(index middle)", cube);
+    MeshNode indexDisShape = new MeshNode("Cube(index distal)", cube);
+    MeshNode middleProxShape = new MeshNode("Cube(middle proximal)", cube);
+    MeshNode middleMiddleShape = new MeshNode("Cube(middle middle)", cube);
+    MeshNode middleDisShape = new MeshNode("Cube(midle distal)", cube);
+    MeshNode ringProxShape = new MeshNode("Cube(ring proximal)", cube);
+    MeshNode ringMiddleShape = new MeshNode("Cube(ring middle)", cube);
+    MeshNode ringDisShape = new MeshNode("Cube(ring distal)", cube);
+    MeshNode pinkyProxShape = new MeshNode("Cube(pinky proximal)", cube);
+    MeshNode pinkyMiddleShape = new MeshNode("Cube(pinky middle)", cube);
+    MeshNode pinkyDisShape = new MeshNode("Cube(pinky distal)", cube);
+
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
     // NameNode head = new NameNode("head");
@@ -198,6 +247,22 @@ public class Arty_GLEventListener implements GLEventListener {
     hand = new NameNode("root");
     NameNode wrist = new NameNode("wrist");
     NameNode palm = new NameNode("palm");
+    NameNode thumbprox = new NameNode("thumb proximal");
+    NameNode thumbmiddle = new NameNode("thumb middle");
+    NameNode thumbdis = new NameNode("thumb distal");
+    NameNode indexprox = new NameNode("index proximal");
+    NameNode indexmiddle = new NameNode("index middle");
+    NameNode indexdis = new NameNode("index distal");
+    NameNode middleprox = new NameNode("index proximal");
+    NameNode middlemiddle = new NameNode("middle middle");
+    NameNode middledis = new NameNode("midle distal");
+    NameNode ringprox = new NameNode("ring proximal");
+    NameNode ringmiddle = new NameNode("ring middle");
+    NameNode ringdis = new NameNode("ring distal");
+    NameNode pinkyprox = new NameNode("pinky proximal");
+    NameNode pinkymiddle = new NameNode("pinky middle");
+    NameNode pinkydis = new NameNode("pinky distal");
+
     
     // float bodyHeight = 3f;
     // float bodyWidth = 2f;
@@ -213,18 +278,46 @@ public class Arty_GLEventListener implements GLEventListener {
     float wristDepth = 1f;
     float palmHeight = 2f;
     float palmWidth = 2f;
+    float thumbProxLength = 0.5f;
+    float thumbMiddleLength = 0.5f;
+    float thumbDisLength = 0.5f;
+    float thumbWidth = 0.3f;
+    float fingerHeight = 1f;
+    float fingerDepth = 1f;
+    float indexProxLength = 0.5f;
+    float indexMiddleLength = 0.5f;
+    float indexDisLength = 0.5f;
+    float middleProxLength = 0.5f;
+    float middleMiddleLength = 0.5f;
+    float middleDisLength = 0.5f;
+    float ringProxLength = 0.5f;
+    float ringMiddleLength = 0.5f;
+    float ringDisLength = 0.5f;
+    float pinkyProxLength = 0.5f;
+    float pinkyMiddleLength = 0.5f;
+    float pinkyDisLength = 0.5f;
+
+
+
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
     // TransformNode robotTranslate = new TransformNode("robot transform",Mat4Transform.translate(0,legLength,0));
 
-    handMoveTranslate = new TransformNode("hand transform",Mat4Transform.translate(xPosition,0,0));
-    TransformNode handTranslate = new TransformNode("hand transform",Mat4Transform.translate(0,palmWidth,0));
+    handMoveTranslate = new TransformNode("hand transform", Mat4Transform.translate(xPosition,0,0));
+    TransformNode handTranslate = new TransformNode("hand transform", Mat4Transform.translate(0,palmWidth,0));
     
-    Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
+    // Mat4 m = Mat4Transform.scale(bodyWidth,bodyHeight,bodyDepth);
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode bodyTransform = new TransformNode("body transform", m);
+
+    Mat4 m = Mat4Transform.scale(wristWidth, wristHeight, wristDepth);
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode wristTransform = new TransformNode("wrist transform", m);
      
-    // m = new Mat4(
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth,palmHeight, wristDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode palmTransform = new TransformNode("palm transform", m);
    
     // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
     //                                        Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
@@ -256,7 +349,6 @@ public class Arty_GLEventListener implements GLEventListener {
     // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     // TransformNode rightlegTransform = new TransformNode("rightleg transform", m);
         
-    // 
     // make scene graph
     // robot.addChild(robotMoveTranslate);
     //   robotMoveTranslate.addChild(robotTranslate);
@@ -282,15 +374,18 @@ public class Arty_GLEventListener implements GLEventListener {
     //       body.addChild(rightleg);
     //         rightleg.addChild(rightlegTransform);
     //         rightlegTransform.addChild(rightLegShape);
-    
-    // robot.update();  // IMPORTANT - don't forget this
 
     hand.addChild(handMoveTranslate);
       handMoveTranslate.addChild(handTranslate);
         handTranslate.addChild(wrist);
           wrist.addChild(wristTransform);
             wristTransform.addChild(wristShape);
+          // wrist.addChild(palm);
+          //   palm.addChild(palmTransform);
+          //   palm.addChild(palmShape);
 
+    
+    // robot.update();  // IMPORTANT - don't forget this
     hand.update();
   }
  
@@ -301,10 +396,17 @@ public class Arty_GLEventListener implements GLEventListener {
     light.setPosition(getLightPosition());  // changing light position each frame
     light.render(gl);
 
-    floor.render(gl); 
+    floor.render(gl);
+
+    // neeewww
+    frontWall.render(gl); 
+    rightWall.render(gl);
+    leftWall.render(gl);
+    backWall.render(gl);
+    ceiling.render(gl);
     
     // if (animation) updateLeftArm();
-    hand.draw(gl);
+    // robot.draw(gl);
   }
     
   private void updatePerspectiveMatrices() {
@@ -312,6 +414,14 @@ public class Arty_GLEventListener implements GLEventListener {
     perspective = Mat4Transform.perspective(45, aspect);
     light.setPerspective(perspective);
     floor.setPerspective(perspective);
+
+    // newwww
+    frontWall.setPerspective(perspective);
+    rightWall.setPerspective(perspective);
+    leftWall.setPerspective(perspective);
+    backWall.setPerspective(perspective);
+    ceiling.setPerspective(perspective);
+
     sphere.setPerspective(perspective);
     cube.setPerspective(perspective);
     cube2.setPerspective(perspective);
@@ -320,6 +430,14 @@ public class Arty_GLEventListener implements GLEventListener {
   private void disposeMeshes(GL3 gl) {
     light.dispose(gl);
     floor.dispose(gl);
+
+    // newww
+    frontWall.dispose(gl);
+    rightWall.dispose(gl);
+    leftWall.dispose(gl);
+    backWall.dispose(gl);
+    ceiling.dispose(gl);
+
     sphere.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
@@ -343,6 +461,59 @@ public class Arty_GLEventListener implements GLEventListener {
     float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     return new Vec3(x,y,z);   
     //return new Vec3(5f,3.4f,5f);
+  }
+
+    // front wall
+  private Mat4 getMforTT2() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size*0.5f), model);
+    return model;
+  }
+
+    // left wall
+  private Mat4 getMforTT3() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundY(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), model);
+    model = Mat4.multiply(Mat4Transform.translate(-size*0.5f,size*0.5f,0), model);
+    return model;
+  }
+
+    // right wall
+  private Mat4 getMforTT4() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(size*0.5f,size*0.5f,0), model);
+    return model;
+  }
+
+    // back wall
+  private Mat4 getMforTT5() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundY(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,size*0.5f), model);
+    return model;
+  }
+
+    // ceiling
+  private Mat4 getMforTT6() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size,0), model);
+    return model;
   }
   
 }

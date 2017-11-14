@@ -103,10 +103,10 @@ public class Arty extends JFrame implements ActionListener {
       glEventListener.decXPosition();
     }
     else if (e.getActionCommand().equalsIgnoreCase("lowered arms")) {
-      glEventListener.loweredArms();
+      // glEventListener.loweredArms();
     }
     else if (e.getActionCommand().equalsIgnoreCase("raised arms")) {
-      glEventListener.raisedArms();
+      // glEventListener.raisedArms();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);
