@@ -192,6 +192,9 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode ringProxShape = new MeshNode("Cube(ring proximal)", cube);
     MeshNode ringMiddleShape = new MeshNode("Cube(ring middle)", cube);
     MeshNode ringDisShape = new MeshNode("Cube(ring distal)", cube);
+    MeshNode middleProxShape = new MeshNode("Cube(middle proximal)", cube);
+    MeshNode middleMiddleShape = new MeshNode("Cube(middle middle)", cube);
+    MeshNode middleDisShape = new MeshNode("Cube(middle distal)", cube);
     
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
@@ -210,6 +213,9 @@ public class Arty_GLEventListener implements GLEventListener {
     NameNode ringProx = new NameNode("ring proximal");
     NameNode ringMiddle = new NameNode("ring middle");
     NameNode ringDis = new NameNode("ring distal");
+    NameNode middleProx = new NameNode("middle proximal");
+    NameNode middleMiddle = new NameNode("middle middle");
+    NameNode middleDis = new NameNode("middle distal");
 
     
     // float bodyHeight = 3f;
@@ -238,6 +244,10 @@ public class Arty_GLEventListener implements GLEventListener {
     float ringProxHeight = 1.1f;
     float ringMiddleHeight = 1.1f;
     float ringDisHeight = 1.1f;
+
+    float middleProxHeight = 1.3f;
+    float middleMiddleHeight = 1.3f;
+    float middleDisHeight = 1.3f;
 
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
@@ -280,24 +290,45 @@ public class Arty_GLEventListener implements GLEventListener {
 
     // ring proximal
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-((palmWidth / 5)),palmHeight + wristHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 5),palmHeight + wristHeight,0));
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringProxHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode ringProxTransform = new TransformNode("ring proximal transform", m);
 
     // ring middle
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-((palmWidth / 5)),palmHeight + wristHeight + ringMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 5),palmHeight + wristHeight + ringMiddleHeight,0));
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringMiddleHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode ringMiddleTransform = new TransformNode("ring middle transform", m);
 
     // ring distal
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-((palmWidth / 5)),palmHeight + wristHeight + ringProxHeight + ringMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 5),palmHeight + wristHeight + ringProxHeight + ringMiddleHeight,0));
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringDisHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode ringDisTransform = new TransformNode("ring distal transform", m);
+
+    // middle proximal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 5),palmHeight + wristHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleProxHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode middleProxTransform = new TransformNode("middle proximal transform", m);
+
+    // middle middle
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 5),palmHeight + wristHeight + middleMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleMiddleHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode middleMiddleTransform = new TransformNode("middle middle transform", m);
+
+    // middle distal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 5),palmHeight + wristHeight + middleProxHeight + middleMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleDisHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode middleDisTransform = new TransformNode("middle distal transform", m);
 
 
     // m = new Mat4(1);   
@@ -386,6 +417,15 @@ public class Arty_GLEventListener implements GLEventListener {
                         ringMiddle.addChild(ringDis);
                           ringDis.addChild(ringDisTransform);
                             ringDisTransform.addChild(ringDisShape); // pinky distal
+            palm.addChild(middleProx);
+              middleProx.addChild(middleProxTransform);
+                middleProxTransform.addChild(middleProxShape); // rmiddle proximal
+                  middleProx.addChild(middleMiddle);
+                    middleMiddle.addChild(middleMiddleTransform);
+                      middleMiddleTransform.addChild(middleMiddleShape); // middle middle
+                        middleMiddle.addChild(middleDis);
+                          middleDis.addChild(middleDisTransform);
+                            middleDisTransform.addChild(middleDisShape); // middle distal
 
 
 
