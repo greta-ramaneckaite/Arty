@@ -195,6 +195,9 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode middleProxShape = new MeshNode("Cube(middle proximal)", cube);
     MeshNode middleMiddleShape = new MeshNode("Cube(middle middle)", cube);
     MeshNode middleDisShape = new MeshNode("Cube(middle distal)", cube);
+    MeshNode indexProxShape = new MeshNode("Cube(index proximal)", cube);
+    MeshNode indexMiddleShape = new MeshNode("Cube(index middle)", cube);
+    MeshNode indexDisShape = new MeshNode("Cube(index distal)", cube);
     
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
@@ -216,6 +219,9 @@ public class Arty_GLEventListener implements GLEventListener {
     NameNode middleProx = new NameNode("middle proximal");
     NameNode middleMiddle = new NameNode("middle middle");
     NameNode middleDis = new NameNode("middle distal");
+    NameNode indexProx = new NameNode("index proximal");
+    NameNode indexMiddle = new NameNode("index middle");
+    NameNode indexDis = new NameNode("index distal");
 
     
     // float bodyHeight = 3f;
@@ -248,6 +254,10 @@ public class Arty_GLEventListener implements GLEventListener {
     float middleProxHeight = 1.3f;
     float middleMiddleHeight = 1.3f;
     float middleDisHeight = 1.3f;
+
+    float indexProxHeight = 1.1f;
+    float indexMiddleHeight = 1.1f;
+    float indexDisHeight = 1.1f;
 
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
@@ -330,6 +340,26 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode middleDisTransform = new TransformNode("middle distal transform", m);
 
+    // index proximal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 2),palmHeight + wristHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexProxHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode indexProxTransform = new TransformNode("index proximal transform", m);
+
+    // index middle
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 2),palmHeight + wristHeight + indexMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexMiddleHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode indexMiddleTransform = new TransformNode("index middle transform", m);
+
+    // index distal
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 2),palmHeight + wristHeight + indexProxHeight + indexMiddleHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexDisHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode indexDisTransform = new TransformNode("index distal transform", m);
 
     // m = new Mat4(1);   
     // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
@@ -419,14 +449,22 @@ public class Arty_GLEventListener implements GLEventListener {
                             ringDisTransform.addChild(ringDisShape); // pinky distal
             palm.addChild(middleProx);
               middleProx.addChild(middleProxTransform);
-                middleProxTransform.addChild(middleProxShape); // rmiddle proximal
+                middleProxTransform.addChild(middleProxShape); // middle proximal
                   middleProx.addChild(middleMiddle);
                     middleMiddle.addChild(middleMiddleTransform);
                       middleMiddleTransform.addChild(middleMiddleShape); // middle middle
                         middleMiddle.addChild(middleDis);
                           middleDis.addChild(middleDisTransform);
                             middleDisTransform.addChild(middleDisShape); // middle distal
-
+            palm.addChild(indexProx);
+              indexProx.addChild(indexProxTransform);
+                indexProxTransform.addChild(indexProxShape); // index proximal
+                  indexProx.addChild(indexMiddle);
+                    indexMiddle.addChild(indexMiddleTransform);
+                      indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                        indexMiddle.addChild(indexDis);
+                          indexDis.addChild(indexDisTransform);
+                            indexDisTransform.addChild(indexDisShape); // index distal
 
 
     hand.update();
