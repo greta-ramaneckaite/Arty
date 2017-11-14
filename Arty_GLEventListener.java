@@ -208,24 +208,30 @@ public class Arty_GLEventListener implements GLEventListener {
     // float legLength = 3.5f;
     // float legScale = 0.67f;
 
-    float wristHeight = 3f;
-    float wristWidth = 2f;
+    float wristHeight = 3.5f;
+    float wristWidth = 1.5f;
     float wristDepth = 1f;
-    float palmHeight = 2f;
-    float palmWidth = 2f;
+    float palmHeight = 3f;
+    float palmWidth = 3f;
+    float palmScale = 0.67f;
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
     // TransformNode robotTranslate = new TransformNode("robot transform",Mat4Transform.translate(0,legLength,0));
 
     handMoveTranslate = new TransformNode("hand transform",Mat4Transform.translate(xPosition,0,0));
-    TransformNode handTranslate = new TransformNode("hand transform",Mat4Transform.translate(0,palmWidth,0));
+    TransformNode handTranslate = new TransformNode("hand transform",Mat4Transform.translate(0,0,0));
     
     Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode wristTransform = new TransformNode("wrist transform", m);
+
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(0,wristHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(palmWidth,palmHeight,wristDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode palmTransform = new TransformNode("palm transform", m);
      
-    // m = new Mat4(
-   
+    // m = new Mat4(1);   
     // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
     //                                        Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
     // leftArmRotate = new TransformNode("leftarm rotate",Mat4Transform.rotateAroundX(180));
@@ -290,6 +296,9 @@ public class Arty_GLEventListener implements GLEventListener {
         handTranslate.addChild(wrist);
           wrist.addChild(wristTransform);
             wristTransform.addChild(wristShape);
+          wrist.addChild(palm);
+            palm.addChild(palmTransform);
+            palmTransform.addChild(palmShape);
 
     hand.update();
   }
