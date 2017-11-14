@@ -186,6 +186,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
     MeshNode wristShape = new MeshNode("Cube(wrist)", cube);
     MeshNode palmShape = new MeshNode("Cube(palm)", cube);
+    MeshNode pinkyProxShape = new MeshNode("Cube(pinky proximal)", cube);
     
     // robot = new NameNode("root");
     // NameNode body = new NameNode("body");
@@ -198,6 +199,7 @@ public class Arty_GLEventListener implements GLEventListener {
     hand = new NameNode("root");
     NameNode wrist = new NameNode("wrist");
     NameNode palm = new NameNode("palm");
+    NameNode pinkyProx = new NameNode("pinky proximal");
     
     // float bodyHeight = 3f;
     // float bodyWidth = 2f;
@@ -210,10 +212,18 @@ public class Arty_GLEventListener implements GLEventListener {
 
     float wristHeight = 3.5f;
     float wristWidth = 1.5f;
-    float wristDepth = 1f;
+    float wristDepth = 0.5f;
     float palmHeight = 3f;
     float palmWidth = 3f;
-    float palmScale = 0.67f;
+    
+
+    float fingerWidth = 0.5f;
+    float fingerDepth = 0.5f;
+
+    float pinkyProxHeight = 1f;
+    float pinkyMiddleHeight = 1f;
+    float pinkyDisHeight = 1f;
+
 
     // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
     // TransformNode robotTranslate = new TransformNode("robot transform",Mat4Transform.translate(0,legLength,0));
@@ -230,6 +240,14 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.scale(palmWidth,palmHeight,wristDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode palmTransform = new TransformNode("palm transform", m);
+
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 3),palmHeight + wristHeight,0));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyProxHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode pinkyProxTransform = new TransformNode("pinky proximal transform", m);
+
+
      
     // m = new Mat4(1);   
     // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
@@ -298,7 +316,11 @@ public class Arty_GLEventListener implements GLEventListener {
             wristTransform.addChild(wristShape);
           wrist.addChild(palm);
             palm.addChild(palmTransform);
-            palmTransform.addChild(palmShape);
+              palmTransform.addChild(palmShape);
+            palm.addChild(pinkyProx);
+              pinkyProx.addChild(pinkyProxTransform);
+                pinkyProxTransform.addChild(pinkyProxShape);
+
 
     hand.update();
   }
