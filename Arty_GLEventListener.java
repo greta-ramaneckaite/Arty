@@ -130,11 +130,16 @@ public class Arty_GLEventListener implements GLEventListener {
     palmRotationZ.update();    
   }
 
-  public void rotateFingertip() {
+  public void rotateIndexProx() {
     stopAnimation();
     fingerX += 10;
     indexProxRotate.setTransform(Mat4Transform.rotateAroundX(fingerX));
-    indexProxRotate.update();    
+    indexProxRotate.update();
+    indexMiddleRotate.setTransform(Mat4Transform.rotateAroundX(fingerX));
+    indexMiddleRotate.update();
+    indexDisRotate.setTransform(Mat4Transform.rotateAroundX(fingerX));
+    indexDisRotate.update();
+
   }
   
   // ***************************************************
@@ -152,7 +157,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private float xPosition = 0;
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
-  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotationZ, indexProxRotate; //rotations go here
+  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotationZ, indexProxRotate, indexMiddleRotate, indexDisRotate;
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
@@ -342,7 +347,7 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexProxTransform = new TransformNode("index proximal transform", m);
 
-    // indexProxRotate = new TransformNode("index proximal rotate",Mat4Transform.rotateAroundX(0));
+    indexProxRotate = new TransformNode("index proximal rotate",Mat4Transform.rotateAroundX(0));
 
     // index middle
     TransformNode indexMiddleTranslate = new TransformNode("index middle translate", Mat4Transform.translate(0, indexHeight, 0));
@@ -351,12 +356,16 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexMiddleTransform = new TransformNode("index middle transform", m);
 
+    indexMiddleRotate = new TransformNode("index middle rotate",Mat4Transform.rotateAroundX(0));
+
     // index distal
     TransformNode indexDisTranslate = new TransformNode("index distal translate", Mat4Transform.translate(0, indexHeight, 0));
     m = new Mat4(1);
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexDisTransform = new TransformNode("index distal transform", m);
+
+    indexDisRotate = new TransformNode("index distal rotate",Mat4Transform.rotateAroundX(0));
 
     // thumb proximal
     TransformNode thumbProxTranslate = new TransformNode("thumb proximal translate", Mat4Transform.translate(thumbPositionX, thumbPositionY, 0));
@@ -432,16 +441,19 @@ public class Arty_GLEventListener implements GLEventListener {
 
                     palmRotationZ.addChild(indexProxTranslate);
                       indexProxTranslate.addChild(indexProx);
-                        indexProx.addChild(indexProxTransform);
-                          indexProxTransform.addChild(indexProxShape); // index proximal
-                        indexProx.addChild(indexMiddleTranslate);
-                          indexMiddleTranslate.addChild(indexMiddle);
-                            indexMiddle.addChild(indexMiddleTransform);
-                              indexMiddleTransform.addChild(indexMiddleShape); // index middle
-                            indexMiddle.addChild(indexDisTranslate);
-                              indexDisTranslate.addChild(indexDis); // <--- rotations go here
-                                indexDis.addChild(indexDisTransform);
-                                  indexDisTransform.addChild(indexDisShape); // index distal
+                        indexProx.addChild(indexProxRotate);
+                          indexProxRotate.addChild(indexProxTransform);
+                            indexProxTransform.addChild(indexProxShape); // index proximal
+                          indexProxRotate.addChild(indexMiddleTranslate);
+                            indexMiddleTranslate.addChild(indexMiddle);
+                              indexMiddle.addChild(indexMiddleRotate);
+                                indexMiddleRotate.addChild(indexMiddleTransform);
+                                  indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                                indexMiddleRotate.addChild(indexDisTranslate);
+                                  indexDisTranslate.addChild(indexDis);
+                                    indexDis.addChild(indexDisRotate);
+                                      indexDisRotate.addChild(indexDisTransform);
+                                        indexDisTransform.addChild(indexDisShape); // index distal
 
                     palmRotationZ.addChild(thumbProxTranslate);
                       thumbProxTranslate.addChild(thumbProx);

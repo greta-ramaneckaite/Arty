@@ -112,7 +112,7 @@ public class Arty extends JFrame implements ActionListener {
       glEventListener.rotatePalmZ();
     }
     else if (e.getActionCommand().equalsIgnoreCase("index proximal rotate")) {
-      glEventListener.rotateFingertip();
+      glEventListener.rotateIndexProx();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);
