@@ -166,16 +166,23 @@ public class Arty_GLEventListener implements GLEventListener {
 
   }
 
-  public void rotatePinky() {
+  public void rotatePinkyX() {
     stopAnimation();
     pinkyX += 10;
-    pinkyProxRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
-    pinkyProxRotate.update();
+    pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyX));
+    pinkyProxRotateX.update();
     pinkyMiddleRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
     pinkyMiddleRotate.update();
     pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
     pinkyDisRotate.update();
+  }
 
+  public void rotatePinkyZ() {
+    stopAnimation();
+    pinkyZ += 10;
+    pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyZ));
+    pinkyProxRotateZ.update();
+    
   }
   
   public void rotateThumbY() {
@@ -187,7 +194,6 @@ public class Arty_GLEventListener implements GLEventListener {
     thumbMiddleRotate.update();
     thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
     thumbDisRotate.update();
-
   }
 
   public void rotateThumbZ() {
@@ -195,7 +201,6 @@ public class Arty_GLEventListener implements GLEventListener {
     thumbZ += 10;
     thumbProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(thumbZ));
     thumbProxRotateZ.update();
-
   }
 
   // ***************************************************
@@ -214,11 +219,12 @@ public class Arty_GLEventListener implements GLEventListener {
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
   private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0;
+  private int indexZ = 0, middleZ = 0, ringZ = 0, pinkyZ = 0;
   private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
   private TransformNode indexProxRotate, indexMiddleRotate, indexDisRotate;
   private TransformNode middleProxRotate, middleMiddleRotate, middleDisRotate;
   private TransformNode ringProxRotate, ringMiddleRotate, ringDisRotate;
-  private TransformNode pinkyProxRotate, pinkyMiddleRotate, pinkyDisRotate;
+  private TransformNode pinkyProxRotateX, pinkyMiddleRotate, pinkyDisRotate, pinkyProxRotateZ;
   private TransformNode thumbProxRotateY, thumbMiddleRotate, thumbDisRotate, thumbProxRotateZ;
   
   private void initialise(GL3 gl) {
@@ -339,7 +345,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode pinkyProxTransform = new TransformNode("pinky proximal transform", m);
 
-    pinkyProxRotate = new TransformNode("pinky proximal rotate",Mat4Transform.rotateAroundX(0));
+    pinkyProxRotateX = new TransformNode("pinky proximal rotate x",Mat4Transform.rotateAroundX(0));
+    pinkyProxRotateZ = new TransformNode("pinky proximal rotate z",Mat4Transform.rotateAroundZ(0));
 
     // pinky middle
     TransformNode pinkyMiddleTranslate = new TransformNode("pinky middle translate", Mat4Transform.translate(0, pinkyHeight, 0));
@@ -482,19 +489,20 @@ public class Arty_GLEventListener implements GLEventListener {
 
                     palmRotation.addChild(pinkyProxTranslate);
                       pinkyProxTranslate.addChild(pinkyProx);
-                        pinkyProx.addChild(pinkyProxRotate);
-                          pinkyProxRotate.addChild(pinkyProxTransform);
-                            pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
-                          pinkyProxRotate.addChild(pinkyMiddleTranslate);
-                            pinkyMiddleTranslate.addChild(pinkyMiddle);
-                              pinkyMiddle.addChild(pinkyMiddleRotate);
-                                pinkyMiddleRotate.addChild(pinkyMiddleTransform);
-                                  pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
-                                pinkyMiddleRotate.addChild(pinkyDisTranslate);
-                                  pinkyDisTranslate.addChild(pinkyDis);
-                                    pinkyDis.addChild(pinkyDisRotate);
-                                      pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
-                                        pinkyDisTransform.addChild(pinkyDisShape);
+                        pinkyProx.addChild(pinkyProxRotateX);
+                          pinkyProxRotateX.addChild(pinkyProxRotateZ);
+                            pinkyProxRotateZ.addChild(pinkyProxTransform);
+                              pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
+                            pinkyProxRotateZ.addChild(pinkyMiddleTranslate);
+                              pinkyMiddleTranslate.addChild(pinkyMiddle);
+                                pinkyMiddle.addChild(pinkyMiddleRotate);
+                                  pinkyMiddleRotate.addChild(pinkyMiddleTransform);
+                                    pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
+                                  pinkyMiddleRotate.addChild(pinkyDisTranslate);
+                                    pinkyDisTranslate.addChild(pinkyDis);
+                                      pinkyDis.addChild(pinkyDisRotate);
+                                        pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
+                                          pinkyDisTransform.addChild(pinkyDisShape);
 
                     palmRotation.addChild(ringProxTranslate);
                       ringProxTranslate.addChild(ringProx);
