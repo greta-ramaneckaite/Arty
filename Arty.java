@@ -64,7 +64,7 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("rotate hand");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("raised arms");
+      b = new JButton("rotate palm z");
       b.addActionListener(this);
       p.add(b);
     this.add(p, BorderLayout.SOUTH);

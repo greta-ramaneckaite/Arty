@@ -126,8 +126,8 @@ public class Arty_GLEventListener implements GLEventListener {
   public void rotatePalmZ() {
     stopAnimation();
     zPosition += 10;
-    // palmRotationZ.setTransform(Mat4Transform.rotateAroundZ(zPosition));
-    // palmRotationZ.update();    
+    palmRotationZ.setTransform(Mat4Transform.rotateAroundZ(zPosition));
+    palmRotationZ.update();    
   }
   
   // ***************************************************
@@ -285,6 +285,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
     handRotation = new TransformNode("hand rotate",Mat4Transform.rotateAroundY(yPosition));
     
+    // wrist
     m = new Mat4(1);
     m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
@@ -296,6 +297,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.scale(palmWidth,palmHeight,wristDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode palmTransform = new TransformNode("palm transform", m);
+
+    palmRotationZ = new TransformNode("rotate palm z",Mat4Transform.rotateAroundZ(zPosition));
 
     // pinky proximal
     m = new Mat4(1);
@@ -470,8 +473,9 @@ public class Arty_GLEventListener implements GLEventListener {
               wristTransform.addChild(wristShape);
                 wrist.addChild(palm);
                   palm.addChild(palmTransform);
-                    palmTransform.addChild(palmShape);
-                  palm.addChild(pinkyProx);
+                    palmTransform.addChild(palmRotationZ);
+                      palmRotationZ.addChild(palmShape);
+                  palmRotationZ.addChild(pinkyProx);
                     pinkyProx.addChild(pinkyProxTransform);
                       pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
                         pinkyProx.addChild(pinkyMiddle);
@@ -480,7 +484,7 @@ public class Arty_GLEventListener implements GLEventListener {
                               pinkyMiddle.addChild(pinkyDis);
                                 pinkyDis.addChild(pinkyDisTransform);
                                   pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
-                  palm.addChild(ringProx);
+                  palmRotationZ.addChild(ringProx);
                     ringProx.addChild(ringProxTransform);
                       ringProxTransform.addChild(ringProxShape); // ring proximal
                         ringProx.addChild(ringMiddle);
@@ -489,7 +493,7 @@ public class Arty_GLEventListener implements GLEventListener {
                               ringMiddle.addChild(ringDis);
                                 ringDis.addChild(ringDisTransform);
                                   ringDisTransform.addChild(ringDisShape); // pinky distal
-                  palm.addChild(middleProx);
+                  palmRotationZ.addChild(middleProx);
                     middleProx.addChild(middleProxTransform);
                       middleProxTransform.addChild(middleProxShape); // middle proximal
                         middleProx.addChild(middleMiddle);
@@ -498,7 +502,7 @@ public class Arty_GLEventListener implements GLEventListener {
                               middleMiddle.addChild(middleDis);
                                 middleDis.addChild(middleDisTransform);
                                   middleDisTransform.addChild(middleDisShape); // middle distal
-                  palm.addChild(indexProx);
+                  palmRotationZ.addChild(indexProx);
                     indexProx.addChild(indexProxTransform);
                       indexProxTransform.addChild(indexProxShape); // index proximal
                         indexProx.addChild(indexMiddle);
@@ -507,7 +511,7 @@ public class Arty_GLEventListener implements GLEventListener {
                               indexMiddle.addChild(indexDis);
                                 indexDis.addChild(indexDisTransform);
                                   indexDisTransform.addChild(indexDisShape); // index distal
-                  palm.addChild(thumbProx);
+                  palmRotationZ.addChild(thumbProx);
                     thumbProx.addChild(thumbProxTransform);
                       thumbProxTransform.addChild(thumbProxShape); // thumb proximal
                         thumbProx.addChild(thumbMiddle);
