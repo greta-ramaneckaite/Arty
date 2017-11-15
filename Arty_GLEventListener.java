@@ -248,13 +248,15 @@ public class Arty_GLEventListener implements GLEventListener {
     float middleHeight = 0.9f;
     float indexHeight = 0.7f;
 
-    float thumbWidth = 0.3f;
-    float thumbHeight = 0.2f;
-    float thumbDepth = 0.5f;
-
     float positionMiddle = 0.4f;
     float positionOutside = 1.1f;
 
+    float thumbWidth = 0.7f;
+    float thumbHeight = 0.5f;
+    float thumbDepth = 0.5f;
+
+    float thumbPositionX = 1.9f;
+    float thumbPositionY = 0.5f;
     
     // wrist
     Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
@@ -356,26 +358,28 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexDisTransform = new TransformNode("index distal transform", m);
 
-    // // thumb proximal
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4,0,0));
-    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
+    // thumb proximal
+    TransformNode thumbProxTranslate = new TransformNode("thumb proximal translate", Mat4Transform.translate(thumbPositionX, thumbPositionY, 0));
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
 
-    // // thumb middle
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth + 0.05f,0,0));
-    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode thumbMiddleTransform = new TransformNode("thumb middle transform", m);
+    // thumb middle
+    TransformNode thumbMiddleTranslate = new TransformNode("thumb middle translate", Mat4Transform.translate(thumbWidth, 0, 0));
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbMiddleTransform = new TransformNode("thumb middle transform", m);
 
-    // // thumb distal
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth*2 + 0.1f,0,0));
-    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode thumbDisTransform = new TransformNode("thumb distal transform", m);
+    // thumb distal
+    TransformNode thumbDisTranslate = new TransformNode("thumb distal translate", Mat4Transform.translate(thumbWidth, 0, 0));
+    m = new Mat4(1);
+    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,thumbHeight,thumbDepth));
+    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    TransformNode thumbDisTransform = new TransformNode("thumb distal transform", m);
+
+
           hand.addChild(wrist);
             wrist.addChild(wristRotation);
               wristRotation.addChild(wristTransform);
@@ -439,15 +443,18 @@ public class Arty_GLEventListener implements GLEventListener {
                                 indexDis.addChild(indexDisTransform);
                                   indexDisTransform.addChild(indexDisShape); // index distal
 
-                    //   palmRotationZ.addChild(thumbProx);
-                    //     thumbProx.addChild(thumbProxTransform);
-                    //       thumbProxTransform.addChild(thumbProxShape); // thumb proximal
-                    //         thumbProx.addChild(thumbMiddle);
-                    //           thumbMiddle.addChild(thumbMiddleTransform);
-                    //             thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
-                    //               thumbMiddle.addChild(thumbDis);
-                    //                 thumbDis.addChild(thumbDisTransform);
-                    //                   thumbDisTransform.addChild(thumbDisShape); // thumb distal
+                    palmRotationZ.addChild(thumbProxTranslate);
+                      thumbProxTranslate.addChild(thumbProx);
+                        thumbProx.addChild(thumbProxTransform);
+                          thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                        thumbProx.addChild(thumbMiddleTranslate);
+                          thumbMiddleTranslate.addChild(thumbMiddle);
+                            thumbMiddle.addChild(thumbMiddleTransform);
+                              thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                            thumbMiddle.addChild(thumbDisTranslate);
+                              thumbDisTranslate.addChild(thumbDis); // <--- rotations go here
+                                thumbDis.addChild(thumbDisTransform);
+                                  thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
