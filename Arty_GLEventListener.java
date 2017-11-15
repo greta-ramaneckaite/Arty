@@ -116,11 +116,11 @@ public class Arty_GLEventListener implements GLEventListener {
     handMoveTranslate.update();
   }
   
-  public void rotateHand() {
+  public void rotateWrist() {
     stopAnimation();
     yPosition += 10;
-    handRotation.setTransform(Mat4Transform.rotateAroundY(yPosition));
-    handRotation.update();
+    wristRotation.setTransform(Mat4Transform.rotateAroundY(yPosition));
+    wristRotation.update();
   }
    
   public void rotatePalmZ() {
@@ -128,6 +128,13 @@ public class Arty_GLEventListener implements GLEventListener {
     zPosition += 10;
     palmRotationZ.setTransform(Mat4Transform.rotateAroundZ(zPosition));
     palmRotationZ.update();    
+  }
+
+  public void rotateFingertip() {
+    stopAnimation();
+    fingerX += 10;
+    indexProxRotate.setTransform(Mat4Transform.rotateAroundX(fingerX));
+    indexProxRotate.update();    
   }
   
   // ***************************************************
@@ -144,8 +151,8 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private float xPosition = 0;
   private int yPosition = 0;
-  private int zPosition = 0;
-  private TransformNode translateX, handMoveTranslate, handRotation, palmRotationZ; //rotations go here
+  private int zPosition = 0, fingerX = 0;
+  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotationZ, indexProxRotate; //rotations go here
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
@@ -176,13 +183,6 @@ public class Arty_GLEventListener implements GLEventListener {
     cube2.setLight(light);
     cube2.setCamera(camera);  
     
-    // make nodes
-    // MeshNode bodyShape = new MeshNode("Cube(body)", cube);
-    // MeshNode headShape = new MeshNode("Sphere(head)", sphere);
-    // MeshNode leftArmShape = new MeshNode("Cube(left arm)", cube2);
-    // MeshNode rightArmShape = new MeshNode("Cube(right arm)", cube2);
-    // MeshNode leftLegShape = new MeshNode("Cube(leftleg)", cube);
-    // MeshNode rightLegShape = new MeshNode("Cube(rightleg)", cube);
 
     MeshNode wristShape = new MeshNode("Cube(wrist)", cube);
     MeshNode palmShape = new MeshNode("Cube(palm)", cube);
@@ -202,13 +202,6 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode thumbMiddleShape = new MeshNode("Cube(thumb middle)", cube);
     MeshNode thumbDisShape = new MeshNode("Cube(thumb distal)", cube);
     
-    // robot = new NameNode("root");
-    // NameNode body = new NameNode("body");
-    // NameNode head = new NameNode("head");
-    // NameNode leftarm = new NameNode("left arm");
-    // NameNode rightarm = new NameNode("right arm");
-    // NameNode leftleg = new NameNode("left leg");
-    // NameNode rightleg = new NameNode("right leg");
 
     hand = new NameNode("root");
     NameNode wrist = new NameNode("wrist");
@@ -247,12 +240,10 @@ public class Arty_GLEventListener implements GLEventListener {
     float palmWidth = 3f;
     
 
-    float fingerWidth = 0.2f;
+    float fingerWidth = 0.15f;
     float fingerDepth = 0.5f;
 
-    float pinkyProxHeight = 0.3f;
-    float pinkyMiddleHeight = 0.3f;
-    float pinkyDisHeight = 0.3f;
+    float pinkyHeight = 0.3f;
 
     float ringProxHeight = 0.4f;
     float ringMiddleHeight = 0.4f;
@@ -270,256 +261,191 @@ public class Arty_GLEventListener implements GLEventListener {
     float thumbHeight = 0.2f;
     float thumbDepth = 0.5f;
 
-
-
-
-    // robotMoveTranslate = new TransformNode("robot transform",Mat4Transform.translate(xPosition,0,0));
-    // TransformNode robotTranslate = new TransformNode("robot transform",Mat4Transform.translate(0,legLength,0));
-
-    // whole hand
-
-    Mat4 m = new Mat4(1);
-    handMoveTranslate = new TransformNode("hand transform",Mat4Transform.translate(xPosition,0,0));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0,0));
-    TransformNode handTranslate = new TransformNode("hand transform", m);
-
-    handRotation = new TransformNode("hand rotate",Mat4Transform.rotateAroundY(yPosition));
     
     // wrist
-    m = new Mat4(1);
-    m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
+    Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode wristTransform = new TransformNode("wrist transform", m);
+    wristRotation = new TransformNode("wrist rotate",Mat4Transform.rotateAroundY(yPosition));
 
     // palm
+    TransformNode palmTranslate = new TransformNode("palm translate", Mat4Transform.translate(0,wristHeight,0));
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(0,wristHeight,0));
     m = Mat4.multiply(m, Mat4Transform.scale(palmWidth,palmHeight,wristDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode palmTransform = new TransformNode("palm transform", m);
-
-    palmRotationZ = new TransformNode("rotate palm z",Mat4Transform.rotateAroundZ(zPosition));
+    palmRotationZ = new TransformNode("rotate palm z",Mat4Transform.rotateAroundZ(0));
 
     // pinky proximal
+    TransformNode pinkyProxTranslate = new TransformNode("pinky proximal translate", Mat4Transform.translate(-(palmWidth/9)-1, 0, 0));
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 6),pinkyProxHeight + (pinkyProxHeight / 2) + 0.1f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyProxHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode pinkyProxTransform = new TransformNode("pinky proximal transform", m);
 
     // pinky middle
+    TransformNode pinkyMiddleTranslate = new TransformNode("pinky middle translate", Mat4Transform.translate(0, pinkyHeight, 0));
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.15f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyMiddleHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode pinkyMiddleTransform = new TransformNode("pinky middle transform", m);
 
     // pinky distal
+    TransformNode pinkyDisTranslate = new TransformNode("pinky distal translate", Mat4Transform.translate(0, pinkyHeight, 0));
     m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (pinkyDisHeight / 2) + 0.2f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyDisHeight,fingerDepth));
+    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode pinkyDisTransform = new TransformNode("pinky distal transform", m);
 
-    // ring proximal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + (ringProxHeight / 2) + 0.05f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringProxHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode ringProxTransform = new TransformNode("ring proximal transform", m);
-
-    // ring middle
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.25f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringMiddleHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode ringMiddleTransform = new TransformNode("ring middle transform", m);
-
-    // ring distal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.35f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringDisHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode ringDisTransform = new TransformNode("ring distal transform", m);
-
-    // middle proximal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + (ringProxHeight / 2) + 0.05f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleProxHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode middleProxTransform = new TransformNode("middle proximal transform", m);
-
-    // middle middle
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.35f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleMiddleHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode middleMiddleTransform = new TransformNode("middle middle transform", m);
-
-    // middle distal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.55f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleDisHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode middleDisTransform = new TransformNode("middle distal transform", m);
-
-    // index proximal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 6),pinkyProxHeight + (ringProxHeight / 2) + 0.05f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexProxHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode indexProxTransform = new TransformNode("index proximal transform", m);
-
-    // index middle
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.25f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexMiddleHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode indexMiddleTransform = new TransformNode("index middle transform", m);
-
-    // index distal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.35f,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexDisHeight,fingerDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode indexDisTransform = new TransformNode("index distal transform", m);
-
-    // thumb proximal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4,0,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
-
-    // thumb middle
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth + 0.05f,0,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode thumbMiddleTransform = new TransformNode("thumb middle transform", m);
-
-    // thumb distal
-    m = new Mat4(1);
-    m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth*2 + 0.1f,0,0));
-    m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
-    m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    TransformNode thumbDisTransform = new TransformNode("thumb distal transform", m);
-
-    // m = new Mat4(1);   
-    // TransformNode leftArmTranslate = new TransformNode("leftarm translate", 
-    //                                        Mat4Transform.translate((bodyWidth*0.5f)+(armScale*0.5f),bodyHeight,0));
-    // leftArmRotate = new TransformNode("leftarm rotate",Mat4Transform.rotateAroundX(180));
+    // // ring proximal
     // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.scale(armScale,armLength,armScale));
+    // m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + (ringProxHeight / 2) + 0.05f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringProxHeight,fingerDepth));
     // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode leftArmScale = new TransformNode("leftarm scale", m);
-    
-    // TransformNode rightArmTranslate = new TransformNode("rightarm translate", 
-    //                                       Mat4Transform.translate(-(bodyWidth*0.5f)-(armScale*0.5f),bodyHeight,0));
-    // rightArmRotate = new TransformNode("rightarm rotate",Mat4Transform.rotateAroundX(180));
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.scale(armScale,armLength,armScale));
-    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode rightArmScale = new TransformNode("rightarm scale", m);
-    
-    // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.translate((bodyWidth*0.5f)-(legScale*0.5f),0,0));
-    // m = Mat4.multiply(m, Mat4Transform.rotateAroundX(180));
-    // m = Mat4.multiply(m, Mat4Transform.scale(legScale,legLength,legScale));
-    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode leftlegTransform = new TransformNode("leftleg transform", m);
+    // TransformNode ringProxTransform = new TransformNode("ring proximal transform", m);
 
+    // // ring middle
     // m = new Mat4(1);
-    // m = Mat4.multiply(m, Mat4Transform.translate(-(bodyWidth*0.5f)+(legScale*0.5f),0,0));
-    // m = Mat4.multiply(m, Mat4Transform.rotateAroundX(180));
-    // m = Mat4.multiply(m, Mat4Transform.scale(legScale,legLength,legScale));
+    // m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.25f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringMiddleHeight,fingerDepth));
     // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-    // TransformNode rightlegTransform = new TransformNode("rightleg transform", m);
-        
-    // 
-    // make scene graph
-    // robot.addChild(robotMoveTranslate);
-    //   robotMoveTranslate.addChild(robotTranslate);
-    //     robotTranslate.addChild(body);
-    //       body.addChild(bodyTransform);
-    //         bodyTransform.addChild(bodyShape);
-    //       body.addChild(head);
-    //         head.addChild(headTransform);
-    //         headTransform.addChild(headShape);
-    //       body.addChild(leftarm);
-    //         leftarm.addChild(leftArmTranslate);
-    //         leftArmTranslate.addChild(leftArmRotate);
-    //         leftArmRotate.addChild(leftArmScale);
-    //         leftArmScale.addChild(leftArmShape);
-    //       body.addChild(rightarm);
-    //         rightarm.addChild(rightArmTranslate);
-    //         rightArmTranslate.addChild(rightArmRotate);
-    //         rightArmRotate.addChild(rightArmScale);
-    //         rightArmScale.addChild(rightArmShape);
-    //       body.addChild(leftleg);
-    //         leftleg.addChild(leftlegTransform);
-    //         leftlegTransform.addChild(leftLegShape);
-    //       body.addChild(rightleg);
-    //         rightleg.addChild(rightlegTransform);
-    //         rightlegTransform.addChild(rightLegShape);
-    
-    // robot.update();  // IMPORTANT - don't forget this
+    // TransformNode ringMiddleTransform = new TransformNode("ring middle transform", m);
 
-    hand.addChild(handMoveTranslate);
-      handMoveTranslate.addChild(handTranslate);
-        handMoveTranslate.addChild(handRotation);
-          handRotation.addChild(wrist);
-            wrist.addChild(wristTransform);
-              wristTransform.addChild(wristShape);
-                wrist.addChild(palm);
-                  palm.addChild(palmTransform);
-                    palmTransform.addChild(palmRotationZ);
-                      palmRotationZ.addChild(palmShape);
-                  palmRotationZ.addChild(pinkyProx);
-                    pinkyProx.addChild(pinkyProxTransform);
-                      pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
-                        pinkyProx.addChild(pinkyMiddle);
-                          pinkyMiddle.addChild(pinkyMiddleTransform);
-                            pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
-                              pinkyMiddle.addChild(pinkyDis);
-                                pinkyDis.addChild(pinkyDisTransform);
-                                  pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
-                  palmRotationZ.addChild(ringProx);
-                    ringProx.addChild(ringProxTransform);
-                      ringProxTransform.addChild(ringProxShape); // ring proximal
-                        ringProx.addChild(ringMiddle);
-                          ringMiddle.addChild(ringMiddleTransform);
-                            ringMiddleTransform.addChild(ringMiddleShape); // ring middle
-                              ringMiddle.addChild(ringDis);
-                                ringDis.addChild(ringDisTransform);
-                                  ringDisTransform.addChild(ringDisShape); // pinky distal
-                  palmRotationZ.addChild(middleProx);
-                    middleProx.addChild(middleProxTransform);
-                      middleProxTransform.addChild(middleProxShape); // middle proximal
-                        middleProx.addChild(middleMiddle);
-                          middleMiddle.addChild(middleMiddleTransform);
-                            middleMiddleTransform.addChild(middleMiddleShape); // middle middle
-                              middleMiddle.addChild(middleDis);
-                                middleDis.addChild(middleDisTransform);
-                                  middleDisTransform.addChild(middleDisShape); // middle distal
-                  palmRotationZ.addChild(indexProx);
-                    indexProx.addChild(indexProxTransform);
-                      indexProxTransform.addChild(indexProxShape); // index proximal
-                        indexProx.addChild(indexMiddle);
-                          indexMiddle.addChild(indexMiddleTransform);
-                            indexMiddleTransform.addChild(indexMiddleShape); // index middle
-                              indexMiddle.addChild(indexDis);
-                                indexDis.addChild(indexDisTransform);
-                                  indexDisTransform.addChild(indexDisShape); // index distal
-                  palmRotationZ.addChild(thumbProx);
-                    thumbProx.addChild(thumbProxTransform);
-                      thumbProxTransform.addChild(thumbProxShape); // thumb proximal
-                        thumbProx.addChild(thumbMiddle);
-                          thumbMiddle.addChild(thumbMiddleTransform);
-                            thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
-                              thumbMiddle.addChild(thumbDis);
-                                thumbDis.addChild(thumbDisTransform);
-                                  thumbDisTransform.addChild(thumbDisShape); // thumb distal
+    // // ring distal
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate(-(palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.35f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,ringDisHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode ringDisTransform = new TransformNode("ring distal transform", m);
+
+    // // middle proximal
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + (ringProxHeight / 2) + 0.05f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleProxHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode middleProxTransform = new TransformNode("middle proximal transform", m);
+
+    // // middle middle
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.35f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleMiddleHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode middleMiddleTransform = new TransformNode("middle middle transform", m);
+
+    // // middle distal
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate((palmWidth / 16),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.55f,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,middleDisHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode middleDisTransform = new TransformNode("middle distal transform", m);
+
+    // // index proximal
+    // TransformNode indexProxTranslate = new TransformNode("index proximal translate", Mat4Transform.translate((palmWidth / 6), pinkyProxHeight + (ringProxHeight / 2) + 0.05f, 0));
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexProxHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode indexProxTransform = new TransformNode("index proximal transform", m);
+
+    // indexProxRotate = new TransformNode("index proximal rotate",Mat4Transform.rotateAroundX(0));
+
+    // // index middle
+    // TransformNode indexMiddleTranslate = new TransformNode("index middle translate", Mat4Transform.translate((palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + (pinkyMiddleHeight / 2) + 0.25f,0));
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexMiddleHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode indexMiddleTransform = new TransformNode("index middle transform", m);
+
+    // // index distal
+    // TransformNode indexDisTranslate = new TransformNode("index distal translate", Mat4Transform.translate((palmWidth / 6),pinkyProxHeight + pinkyMiddleHeight + pinkyDisHeight + (ringDisHeight / 2) + 0.35f,0));
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,indexDisHeight,fingerDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode indexDisTransform = new TransformNode("index distal transform", m);
+
+    // // thumb proximal
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4,0,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
+
+    // // thumb middle
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth + 0.05f,0,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode thumbMiddleTransform = new TransformNode("thumb middle transform", m);
+
+    // // thumb distal
+    // m = new Mat4(1);
+    // m = Mat4.multiply(m, Mat4Transform.translate(palmWidth/4+thumbWidth*2 + 0.1f,0,0));
+    // m = Mat4.multiply(m, Mat4Transform.scale(thumbWidth,-thumbHeight,thumbDepth));
+    // m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+    // TransformNode thumbDisTransform = new TransformNode("thumb distal transform", m);
+          hand.addChild(wrist);
+            wrist.addChild(wristRotation);
+              wristRotation.addChild(wristTransform);
+                wristTransform.addChild(wristShape);
+                  wristRotation.addChild(palm);
+
+                  palm.addChild(palmTranslate);
+                    palmTranslate.addChild(palmRotationZ);
+                      palmRotationZ.addChild(palmTransform);
+                        palmTransform.addChild(palmShape);
+
+                    palmRotationZ.addChild(pinkyProxTranslate);
+                      pinkyProxTranslate.addChild(pinkyProx);
+                        pinkyProx.addChild(pinkyProxTransform);
+                          pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
+                          pinkyProxTransform.addChild(pinkyMiddleTranslate);
+                            pinkyMiddleTranslate.addChild(pinkyMiddle);
+                            pinkyMiddle.addChild(pinkyMiddleTransform);
+                                pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
+                                    // pinkyMiddle.addChild(pinkyDis);
+                                    //   pinkyDis.addChild(pinkyDisTransform);
+                                    //     pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
+
+                    // palmRotationZ.addChild(ringProx);
+                    //   ringProx.addChild(ringProxTransform);
+                    //     ringProxTransform.addChild(ringProxShape); // ring proximal
+                    //       ringProx.addChild(ringMiddle);
+                    //         ringMiddle.addChild(ringMiddleTransform);
+                    //           ringMiddleTransform.addChild(ringMiddleShape); // ring middle
+                    //             ringMiddle.addChild(ringDis);
+                    //               ringDis.addChild(ringDisTransform);
+                    //                 ringDisTransform.addChild(ringDisShape); // pinky distal
+
+                    // palmRotationZ.addChild(middleProx);
+                    //   middleProx.addChild(middleProxTransform);
+                    //     middleProxTransform.addChild(middleProxShape); // middle proximal
+                    //       middleProx.addChild(middleMiddle);
+                    //         middleMiddle.addChild(middleMiddleTransform);
+                    //           middleMiddleTransform.addChild(middleMiddleShape); // middle middle
+                    //             middleMiddle.addChild(middleDis);
+                    //               middleDis.addChild(middleDisTransform);
+                    //                 middleDisTransform.addChild(middleDisShape); // middle distal
+
+                    // palmRotationZ.addChild(indexProxTranslate);
+                    //   indexProxTranslate.addChild(indexProx);
+                    //   indexProx.addChild(indexProxRotate);
+                    //     indexProxRotate.addChild(indexProxTransform);
+                    //       indexProxTransform.addChild(indexProxShape); // index proximal
+                    //         indexProxTransform.addChild(indexMiddle);
+                    //             indexMiddle.addChild(indexMiddleTransform);
+                    //               indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                    //                 indexMiddle.addChild(indexDis);
+                    //                   indexDis.addChild(indexDisTransform);
+                    //                     indexDisTransform.addChild(indexDisShape); // index distal
+
+                    //   palmRotationZ.addChild(thumbProx);
+                    //     thumbProx.addChild(thumbProxTransform);
+                    //       thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                    //         thumbProx.addChild(thumbMiddle);
+                    //           thumbMiddle.addChild(thumbMiddleTransform);
+                    //             thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                    //               thumbMiddle.addChild(thumbDis);
+                    //                 thumbDis.addChild(thumbDisTransform);
+                    //                   thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
