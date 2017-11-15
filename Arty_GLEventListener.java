@@ -178,15 +178,23 @@ public class Arty_GLEventListener implements GLEventListener {
 
   }
   
-  public void rotateThumb() {
+  public void rotateThumbY() {
     stopAnimation();
     thumbY -= 10;
-    thumbProxRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
-    thumbProxRotate.update();
+    thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbY));
+    thumbProxRotateY.update();
     thumbMiddleRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
     thumbMiddleRotate.update();
     thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
     thumbDisRotate.update();
+
+  }
+
+  public void rotateThumbZ() {
+    stopAnimation();
+    thumbZ += 10;
+    thumbProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(thumbZ));
+    thumbProxRotateZ.update();
 
   }
 
@@ -205,13 +213,13 @@ public class Arty_GLEventListener implements GLEventListener {
   private float xPosition = 0;
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
-  private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0;
+  private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0;
   private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
   private TransformNode indexProxRotate, indexMiddleRotate, indexDisRotate;
   private TransformNode middleProxRotate, middleMiddleRotate, middleDisRotate;
   private TransformNode ringProxRotate, ringMiddleRotate, ringDisRotate;
   private TransformNode pinkyProxRotate, pinkyMiddleRotate, pinkyDisRotate;
-  private TransformNode thumbProxRotate, thumbMiddleRotate, thumbDisRotate;
+  private TransformNode thumbProxRotateY, thumbMiddleRotate, thumbDisRotate, thumbProxRotateZ;
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
@@ -439,7 +447,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode thumbProxTransform = new TransformNode("thumb proximal transform", m);
 
-    thumbProxRotate = new TransformNode("thumb proximal rotate",Mat4Transform.rotateAroundY(0));
+    thumbProxRotateY = new TransformNode("thumb proximal rotate y",Mat4Transform.rotateAroundY(0));
+    thumbProxRotateZ = new TransformNode("thumb proximal rotate z",Mat4Transform.rotateAroundZ(0));
 
     // thumb middle
     TransformNode thumbMiddleTranslate = new TransformNode("thumb middle translate", Mat4Transform.translate(thumbWidth, 0, 0));
@@ -537,19 +546,20 @@ public class Arty_GLEventListener implements GLEventListener {
 
                     palmRotation.addChild(thumbProxTranslate);
                       thumbProxTranslate.addChild(thumbProx);
-                        thumbProx.addChild(thumbProxRotate);
-                          thumbProxRotate.addChild(thumbProxTransform);
-                            thumbProxTransform.addChild(thumbProxShape); // thumb proximal
-                          thumbProxRotate.addChild(thumbMiddleTranslate);
-                            thumbMiddleTranslate.addChild(thumbMiddle);
-                              thumbMiddle.addChild(thumbMiddleRotate);
-                                thumbMiddleRotate.addChild(thumbMiddleTransform);
-                                  thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
-                                thumbMiddleRotate.addChild(thumbDisTranslate);
-                                  thumbDisTranslate.addChild(thumbDis);
-                                    thumbDis.addChild(thumbDisRotate);
-                                      thumbDisRotate.addChild(thumbDisTransform);
-                                        thumbDisTransform.addChild(thumbDisShape); // thumb distal
+                        thumbProx.addChild(thumbProxRotateY);
+                          thumbProxRotateY.addChild(thumbProxRotateZ);
+                            thumbProxRotateZ.addChild(thumbProxTransform);
+                              thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                            thumbProxRotateZ.addChild(thumbMiddleTranslate);
+                              thumbMiddleTranslate.addChild(thumbMiddle);
+                                thumbMiddle.addChild(thumbMiddleRotate);
+                                  thumbMiddleRotate.addChild(thumbMiddleTransform);
+                                    thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                                  thumbMiddleRotate.addChild(thumbDisTranslate);
+                                    thumbDisTranslate.addChild(thumbDis);
+                                      thumbDis.addChild(thumbDisRotate);
+                                        thumbDisRotate.addChild(thumbDisTransform);
+                                          thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
