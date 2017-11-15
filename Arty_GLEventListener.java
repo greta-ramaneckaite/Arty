@@ -154,16 +154,22 @@ public class Arty_GLEventListener implements GLEventListener {
 
   }
 
-  public void rotateRing() {
+  public void rotateRingX() {
     stopAnimation();
     ringX += 10;
-    ringProxRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
-    ringProxRotate.update();
+    ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringX));
+    ringProxRotateX.update();
     ringMiddleRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
     ringMiddleRotate.update();
     ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
     ringDisRotate.update();
+  }
 
+  public void rotateRingZ() {
+    stopAnimation();
+    ringZ += 10;
+    ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringZ));
+    ringProxRotateZ.update();
   }
 
   public void rotatePinkyX() {
@@ -223,7 +229,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
   private TransformNode indexProxRotate, indexMiddleRotate, indexDisRotate;
   private TransformNode middleProxRotate, middleMiddleRotate, middleDisRotate;
-  private TransformNode ringProxRotate, ringMiddleRotate, ringDisRotate;
+  private TransformNode ringProxRotateX, ringMiddleRotate, ringDisRotate, ringProxRotateZ;
   private TransformNode pinkyProxRotateX, pinkyMiddleRotate, pinkyDisRotate, pinkyProxRotateZ;
   private TransformNode thumbProxRotateY, thumbMiddleRotate, thumbDisRotate, thumbProxRotateZ;
   
@@ -373,7 +379,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode ringProxTransform = new TransformNode("ring proximal transform", m);
 
-    ringProxRotate = new TransformNode("ring proximal rotate",Mat4Transform.rotateAroundX(0));
+    ringProxRotateX = new TransformNode("ring proximal rotate x",Mat4Transform.rotateAroundX(0));
+    ringProxRotateZ = new TransformNode("ring proximal rotate z",Mat4Transform.rotateAroundZ(0));
 
     // ring middle
     TransformNode ringMiddleTranslate = new TransformNode("ring middle translate", Mat4Transform.translate(0, ringHeight, 0));
@@ -506,19 +513,20 @@ public class Arty_GLEventListener implements GLEventListener {
 
                     palmRotation.addChild(ringProxTranslate);
                       ringProxTranslate.addChild(ringProx);
-                        ringProx.addChild(ringProxRotate);
-                          ringProxRotate.addChild(ringProxTransform);
-                            ringProxTransform.addChild(ringProxShape); // ring proximal
-                          ringProxRotate.addChild(ringMiddleTranslate);
-                            ringMiddleTranslate.addChild(ringMiddle);
-                              ringMiddle.addChild(ringMiddleRotate);
-                                ringMiddleRotate.addChild(ringMiddleTransform);
-                                  ringMiddleTransform.addChild(ringMiddleShape); // ring middle
-                                ringMiddleRotate.addChild(ringDisTranslate);
-                                  ringDisTranslate.addChild(ringDis);
-                                    ringDis.addChild(ringDisRotate);
-                                      ringDisRotate.addChild(ringDisTransform);
-                                        ringDisTransform.addChild(ringDisShape); // ring distal
+                        ringProx.addChild(ringProxRotateX);
+                          ringProxRotateX.addChild(ringProxRotateZ);
+                            ringProxRotateZ.addChild(ringProxTransform);
+                              ringProxTransform.addChild(ringProxShape); // ring proximal
+                            ringProxRotateZ.addChild(ringMiddleTranslate);
+                              ringMiddleTranslate.addChild(ringMiddle);
+                                ringMiddle.addChild(ringMiddleRotate);
+                                  ringMiddleRotate.addChild(ringMiddleTransform);
+                                    ringMiddleTransform.addChild(ringMiddleShape); // ring middle
+                                  ringMiddleRotate.addChild(ringDisTranslate);
+                                    ringDisTranslate.addChild(ringDis);
+                                      ringDis.addChild(ringDisRotate);
+                                        ringDisRotate.addChild(ringDisTransform);
+                                          ringDisTransform.addChild(ringDisShape); // ring distal
 
                     palmRotation.addChild(middleProxTranslate);
                       middleProxTranslate.addChild(middleProx);
