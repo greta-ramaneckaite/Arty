@@ -130,28 +130,40 @@ public class Arty_GLEventListener implements GLEventListener {
     palmRotation.update();    
   }
 
-  public void rotateIndex() {
+  public void rotateIndexX() {
     stopAnimation();
     indexX += 10;
-    indexProxRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
-    indexProxRotate.update();
+    indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexX));
+    indexProxRotateX.update();
     indexMiddleRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
     indexMiddleRotate.update();
     indexDisRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
     indexDisRotate.update();
-
   }
 
-  public void rotateMiddle() {
+  public void rotateIndexZ() {
+    stopAnimation();
+    indexZ -= 10;
+    indexProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(indexZ));
+    indexProxRotateZ.update();
+  }
+
+  public void rotateMiddleX() {
     stopAnimation();
     middleX += 10;
-    middleProxRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
-    middleProxRotate.update();
+    middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
+    middleProxRotateX.update();
     middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
     middleMiddleRotate.update();
     middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
     middleDisRotate.update();
+  }
 
+  public void rotateMiddleZ() {
+    stopAnimation();
+    middleZ -= 10;
+    middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middleZ));
+    middleProxRotateZ.update();
   }
 
   public void rotateRingX() {
@@ -227,8 +239,8 @@ public class Arty_GLEventListener implements GLEventListener {
   private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0;
   private int indexZ = 0, middleZ = 0, ringZ = 0, pinkyZ = 0;
   private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
-  private TransformNode indexProxRotate, indexMiddleRotate, indexDisRotate;
-  private TransformNode middleProxRotate, middleMiddleRotate, middleDisRotate;
+  private TransformNode indexProxRotateX, indexMiddleRotate, indexDisRotate, indexProxRotateZ;
+  private TransformNode middleProxRotateX, middleMiddleRotate, middleDisRotate, middleProxRotateZ;
   private TransformNode ringProxRotateX, ringMiddleRotate, ringDisRotate, ringProxRotateZ;
   private TransformNode pinkyProxRotateX, pinkyMiddleRotate, pinkyDisRotate, pinkyProxRotateZ;
   private TransformNode thumbProxRotateY, thumbMiddleRotate, thumbDisRotate, thumbProxRotateZ;
@@ -407,7 +419,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode middleProxTransform = new TransformNode("middle proximal transform", m);
 
-    middleProxRotate = new TransformNode("middle proximal rotate",Mat4Transform.rotateAroundX(0));
+    middleProxRotateX = new TransformNode("middle proximal rotate x",Mat4Transform.rotateAroundX(0));
+    middleProxRotateZ = new TransformNode("middle proximal rotate z",Mat4Transform.rotateAroundZ(0));
 
     // middle middle
     TransformNode middleMiddleTranslate = new TransformNode("middle middle translate", Mat4Transform.translate(0, middleHeight, 0));
@@ -434,7 +447,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode indexProxTransform = new TransformNode("index proximal transform", m);
 
-    indexProxRotate = new TransformNode("index proximal rotate",Mat4Transform.rotateAroundX(0));
+    indexProxRotateX = new TransformNode("index proximal rotate x",Mat4Transform.rotateAroundX(0));
+    indexProxRotateZ = new TransformNode("index proximal rotate z",Mat4Transform.rotateAroundZ(0));
 
     // index middle
     TransformNode indexMiddleTranslate = new TransformNode("index middle translate", Mat4Transform.translate(0, indexHeight, 0));
@@ -530,35 +544,37 @@ public class Arty_GLEventListener implements GLEventListener {
 
                     palmRotation.addChild(middleProxTranslate);
                       middleProxTranslate.addChild(middleProx);
-                        middleProx.addChild(middleProxRotate);
-                          middleProxRotate.addChild(middleProxTransform);
-                            middleProxTransform.addChild(middleProxShape); // middle proximal
-                          middleProxRotate.addChild(middleMiddleTranslate);
-                            middleMiddleTranslate.addChild(middleMiddle);
-                              middleMiddle.addChild(middleMiddleRotate);
-                                middleMiddleRotate.addChild(middleMiddleTransform);
-                                  middleMiddleTransform.addChild(middleMiddleShape); // middle middle
-                                middleMiddleRotate.addChild(middleDisTranslate);
-                                  middleDisTranslate.addChild(middleDis);
-                                    middleDis.addChild(middleDisRotate);
-                                      middleDisRotate.addChild(middleDisTransform);
-                                        middleDisTransform.addChild(middleDisShape); // middle distal
+                        middleProx.addChild(middleProxRotateX);
+                          middleProxRotateX.addChild(middleProxRotateZ);
+                            middleProxRotateZ.addChild(middleProxTransform);
+                              middleProxTransform.addChild(middleProxShape); // middle proximal
+                            middleProxRotateZ.addChild(middleMiddleTranslate);
+                              middleMiddleTranslate.addChild(middleMiddle);
+                                middleMiddle.addChild(middleMiddleRotate);
+                                  middleMiddleRotate.addChild(middleMiddleTransform);
+                                    middleMiddleTransform.addChild(middleMiddleShape); // middle middle
+                                  middleMiddleRotate.addChild(middleDisTranslate);
+                                    middleDisTranslate.addChild(middleDis);
+                                      middleDis.addChild(middleDisRotate);
+                                        middleDisRotate.addChild(middleDisTransform);
+                                          middleDisTransform.addChild(middleDisShape); // middle distal
 
                     palmRotation.addChild(indexProxTranslate);
                       indexProxTranslate.addChild(indexProx);
-                        indexProx.addChild(indexProxRotate);
-                          indexProxRotate.addChild(indexProxTransform);
-                            indexProxTransform.addChild(indexProxShape); // index proximal
-                          indexProxRotate.addChild(indexMiddleTranslate);
-                            indexMiddleTranslate.addChild(indexMiddle);
-                              indexMiddle.addChild(indexMiddleRotate);
-                                indexMiddleRotate.addChild(indexMiddleTransform);
-                                  indexMiddleTransform.addChild(indexMiddleShape); // index middle
-                                indexMiddleRotate.addChild(indexDisTranslate);
-                                  indexDisTranslate.addChild(indexDis);
-                                    indexDis.addChild(indexDisRotate);
-                                      indexDisRotate.addChild(indexDisTransform);
-                                        indexDisTransform.addChild(indexDisShape); // index distal
+                        indexProx.addChild(indexProxRotateX);
+                          indexProxRotateX.addChild(indexProxRotateZ);
+                            indexProxRotateZ.addChild(indexProxTransform);
+                              indexProxTransform.addChild(indexProxShape); // index proximal
+                            indexProxRotateZ.addChild(indexMiddleTranslate);
+                              indexMiddleTranslate.addChild(indexMiddle);
+                                indexMiddle.addChild(indexMiddleRotate);
+                                  indexMiddleRotate.addChild(indexMiddleTransform);
+                                    indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                                  indexMiddleRotate.addChild(indexDisTranslate);
+                                    indexDisTranslate.addChild(indexDis);
+                                      indexDis.addChild(indexDisRotate);
+                                        indexDisRotate.addChild(indexDisTransform);
+                                          indexDisTransform.addChild(indexDisShape); // index distal
 
                     palmRotation.addChild(thumbProxTranslate);
                       thumbProxTranslate.addChild(thumbProx);

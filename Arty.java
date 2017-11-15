@@ -61,10 +61,16 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("rotate palm z");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("index rotate");
+      b = new JButton("index rotate x");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("middle rotate");
+      b = new JButton("index rotate z");
+      b.addActionListener(this);
+      p.add(b);
+      b = new JButton("middle rotate x");
+      b.addActionListener(this);
+      p.add(b);
+      b = new JButton("middle rotate z");
       b.addActionListener(this);
       p.add(b);
       b = new JButton("ring rotate x");
@@ -120,11 +126,17 @@ public class Arty extends JFrame implements ActionListener {
     else if (e.getActionCommand().equalsIgnoreCase("rotate palm z")) {
       glEventListener.rotatePalmZ();
     }
-    else if (e.getActionCommand().equalsIgnoreCase("index rotate")) {
-      glEventListener.rotateIndex();
+    else if (e.getActionCommand().equalsIgnoreCase("index rotate x")) {
+      glEventListener.rotateIndexX();
     }
-    else if (e.getActionCommand().equalsIgnoreCase("middle rotate")) {
-      glEventListener.rotateMiddle();
+    else if (e.getActionCommand().equalsIgnoreCase("index rotate z")) {
+      glEventListener.rotateIndexZ();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("middle rotate x")) {
+      glEventListener.rotateMiddleX();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("middle rotate z")) {
+      glEventListener.rotateMiddleZ();
     }
     else if (e.getActionCommand().equalsIgnoreCase("ring rotate x")) {
       glEventListener.rotateRingX();
