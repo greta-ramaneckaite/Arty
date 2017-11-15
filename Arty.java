@@ -61,7 +61,7 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("decrease X position");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("rotate");
+      b = new JButton("rotate hand");
       b.addActionListener(this);
       p.add(b);
       b = new JButton("raised arms");
@@ -102,11 +102,11 @@ public class Arty extends JFrame implements ActionListener {
     else if (e.getActionCommand().equalsIgnoreCase("decrease X position")) {
       glEventListener.decXPosition();
     }
-    else if (e.getActionCommand().equalsIgnoreCase("rotate")) {
-      glEventListener.rotate();
+    else if (e.getActionCommand().equalsIgnoreCase("rotate hand")) {
+      glEventListener.rotateHand();
     }
-    else if (e.getActionCommand().equalsIgnoreCase("raised arms")) {
-      // glEventListener.raisedArms();
+    else if (e.getActionCommand().equalsIgnoreCase("rotate palm z")) {
+      glEventListener.rotatePalmZ();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);

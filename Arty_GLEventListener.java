@@ -116,19 +116,18 @@ public class Arty_GLEventListener implements GLEventListener {
     handMoveTranslate.update();
   }
   
-  public void rotate() {
+  public void rotateHand() {
     stopAnimation();
     yPosition += 10;
     handRotation.setTransform(Mat4Transform.rotateAroundY(yPosition));
     handRotation.update();
   }
    
-  public void raisedArms() {
+  public void rotatePalmZ() {
     stopAnimation();
-    // leftArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
-    // leftArmRotate.update();
-    // rightArmRotate.setTransform(Mat4Transform.rotateAroundX(0));
-    // rightArmRotate.update();    
+    zPosition += 10;
+    // palmRotationZ.setTransform(Mat4Transform.rotateAroundZ(zPosition));
+    // palmRotationZ.update();    
   }
   
   // ***************************************************
@@ -145,7 +144,8 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private float xPosition = 0;
   private int yPosition = 0;
-  private TransformNode translateX, handMoveTranslate, handRotation; //rotations go here
+  private int zPosition = 0;
+  private TransformNode translateX, handMoveTranslate, handRotation, palmRotationZ; //rotations go here
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
@@ -468,54 +468,54 @@ public class Arty_GLEventListener implements GLEventListener {
           handRotation.addChild(wrist);
             wrist.addChild(wristTransform);
               wristTransform.addChild(wristShape);
-            wrist.addChild(palm);
-              palm.addChild(palmTransform);
-                palmTransform.addChild(palmShape);
-              palm.addChild(pinkyProx);
-                pinkyProx.addChild(pinkyProxTransform);
-                  pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
-                    pinkyProx.addChild(pinkyMiddle);
-                      pinkyMiddle.addChild(pinkyMiddleTransform);
-                        pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
-                          pinkyMiddle.addChild(pinkyDis);
-                            pinkyDis.addChild(pinkyDisTransform);
-                              pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
-              palm.addChild(ringProx);
-                ringProx.addChild(ringProxTransform);
-                  ringProxTransform.addChild(ringProxShape); // ring proximal
-                    ringProx.addChild(ringMiddle);
-                      ringMiddle.addChild(ringMiddleTransform);
-                        ringMiddleTransform.addChild(ringMiddleShape); // ring middle
-                          ringMiddle.addChild(ringDis);
-                            ringDis.addChild(ringDisTransform);
-                              ringDisTransform.addChild(ringDisShape); // pinky distal
-              palm.addChild(middleProx);
-                middleProx.addChild(middleProxTransform);
-                  middleProxTransform.addChild(middleProxShape); // middle proximal
-                    middleProx.addChild(middleMiddle);
-                      middleMiddle.addChild(middleMiddleTransform);
-                        middleMiddleTransform.addChild(middleMiddleShape); // middle middle
-                          middleMiddle.addChild(middleDis);
-                            middleDis.addChild(middleDisTransform);
-                              middleDisTransform.addChild(middleDisShape); // middle distal
-              palm.addChild(indexProx);
-                indexProx.addChild(indexProxTransform);
-                  indexProxTransform.addChild(indexProxShape); // index proximal
-                    indexProx.addChild(indexMiddle);
-                      indexMiddle.addChild(indexMiddleTransform);
-                        indexMiddleTransform.addChild(indexMiddleShape); // index middle
-                          indexMiddle.addChild(indexDis);
-                            indexDis.addChild(indexDisTransform);
-                              indexDisTransform.addChild(indexDisShape); // index distal
-              palm.addChild(thumbProx);
-                thumbProx.addChild(thumbProxTransform);
-                  thumbProxTransform.addChild(thumbProxShape); // thumb proximal
-                    thumbProx.addChild(thumbMiddle);
-                      thumbMiddle.addChild(thumbMiddleTransform);
-                        thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
-                          thumbMiddle.addChild(thumbDis);
-                            thumbDis.addChild(thumbDisTransform);
-                              thumbDisTransform.addChild(thumbDisShape); // thumb distal
+                wrist.addChild(palm);
+                  palm.addChild(palmTransform);
+                    palmTransform.addChild(palmShape);
+                  palm.addChild(pinkyProx);
+                    pinkyProx.addChild(pinkyProxTransform);
+                      pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
+                        pinkyProx.addChild(pinkyMiddle);
+                          pinkyMiddle.addChild(pinkyMiddleTransform);
+                            pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
+                              pinkyMiddle.addChild(pinkyDis);
+                                pinkyDis.addChild(pinkyDisTransform);
+                                  pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
+                  palm.addChild(ringProx);
+                    ringProx.addChild(ringProxTransform);
+                      ringProxTransform.addChild(ringProxShape); // ring proximal
+                        ringProx.addChild(ringMiddle);
+                          ringMiddle.addChild(ringMiddleTransform);
+                            ringMiddleTransform.addChild(ringMiddleShape); // ring middle
+                              ringMiddle.addChild(ringDis);
+                                ringDis.addChild(ringDisTransform);
+                                  ringDisTransform.addChild(ringDisShape); // pinky distal
+                  palm.addChild(middleProx);
+                    middleProx.addChild(middleProxTransform);
+                      middleProxTransform.addChild(middleProxShape); // middle proximal
+                        middleProx.addChild(middleMiddle);
+                          middleMiddle.addChild(middleMiddleTransform);
+                            middleMiddleTransform.addChild(middleMiddleShape); // middle middle
+                              middleMiddle.addChild(middleDis);
+                                middleDis.addChild(middleDisTransform);
+                                  middleDisTransform.addChild(middleDisShape); // middle distal
+                  palm.addChild(indexProx);
+                    indexProx.addChild(indexProxTransform);
+                      indexProxTransform.addChild(indexProxShape); // index proximal
+                        indexProx.addChild(indexMiddle);
+                          indexMiddle.addChild(indexMiddleTransform);
+                            indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                              indexMiddle.addChild(indexDis);
+                                indexDis.addChild(indexDisTransform);
+                                  indexDisTransform.addChild(indexDisShape); // index distal
+                  palm.addChild(thumbProx);
+                    thumbProx.addChild(thumbProxTransform);
+                      thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                        thumbProx.addChild(thumbMiddle);
+                          thumbMiddle.addChild(thumbMiddleTransform);
+                            thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                              thumbMiddle.addChild(thumbDis);
+                                thumbDis.addChild(thumbDisTransform);
+                                  thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
