@@ -126,8 +126,8 @@ public class Arty_GLEventListener implements GLEventListener {
   public void rotatePalmZ() {
     stopAnimation();
     zPosition += 10;
-    palmRotationZ.setTransform(Mat4Transform.rotateAroundZ(zPosition));
-    palmRotationZ.update();    
+    palmRotation.setTransform(Mat4Transform.rotateAroundZ(zPosition));
+    palmRotation.update();    
   }
 
   public void rotateIndex() {
@@ -206,7 +206,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
   private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0;
-  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotationZ;
+  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
   private TransformNode indexProxRotate, indexMiddleRotate, indexDisRotate;
   private TransformNode middleProxRotate, middleMiddleRotate, middleDisRotate;
   private TransformNode ringProxRotate, ringMiddleRotate, ringDisRotate;
@@ -312,7 +312,8 @@ public class Arty_GLEventListener implements GLEventListener {
     Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode wristTransform = new TransformNode("wrist transform", m);
-    TransformNode wristRotation = new TransformNode("wrist rotate",Mat4Transform.rotateAroundY(yPosition));
+    
+    wristRotation = new TransformNode("wrist rotate",Mat4Transform.rotateAroundY(yPosition));
 
     // palm
     TransformNode palmTranslate = new TransformNode("palm translate", Mat4Transform.translate(0,wristHeight,0));
@@ -320,7 +321,8 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.scale(palmWidth,palmHeight,wristDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode palmTransform = new TransformNode("palm transform", m);
-    TransformNode palmRotationZ = new TransformNode("rotate palm z",Mat4Transform.rotateAroundZ(0));
+    
+    palmRotation = new TransformNode("rotate palm",Mat4Transform.rotateAroundZ(0));
 
     // pinky proximal
     TransformNode pinkyProxTranslate = new TransformNode("pinky proximal translate", Mat4Transform.translate(-positionOutside, palmHeight, 0));
@@ -465,11 +467,11 @@ public class Arty_GLEventListener implements GLEventListener {
                   wristRotation.addChild(palm);
 
                   palm.addChild(palmTranslate);
-                    palmTranslate.addChild(palmRotationZ);
-                      palmRotationZ.addChild(palmTransform);
+                    palmTranslate.addChild(palmRotation);
+                      palmRotation.addChild(palmTransform);
                         palmTransform.addChild(palmShape);
 
-                    palmRotationZ.addChild(pinkyProxTranslate);
+                    palmRotation.addChild(pinkyProxTranslate);
                       pinkyProxTranslate.addChild(pinkyProx);
                         pinkyProx.addChild(pinkyProxRotate);
                           pinkyProxRotate.addChild(pinkyProxTransform);
@@ -485,7 +487,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                       pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
                                         pinkyDisTransform.addChild(pinkyDisShape);
 
-                    palmRotationZ.addChild(ringProxTranslate);
+                    palmRotation.addChild(ringProxTranslate);
                       ringProxTranslate.addChild(ringProx);
                         ringProx.addChild(ringProxRotate);
                           ringProxRotate.addChild(ringProxTransform);
@@ -501,7 +503,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                       ringDisRotate.addChild(ringDisTransform);
                                         ringDisTransform.addChild(ringDisShape); // ring distal
 
-                    palmRotationZ.addChild(middleProxTranslate);
+                    palmRotation.addChild(middleProxTranslate);
                       middleProxTranslate.addChild(middleProx);
                         middleProx.addChild(middleProxRotate);
                           middleProxRotate.addChild(middleProxTransform);
@@ -517,7 +519,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                       middleDisRotate.addChild(middleDisTransform);
                                         middleDisTransform.addChild(middleDisShape); // middle distal
 
-                    palmRotationZ.addChild(indexProxTranslate);
+                    palmRotation.addChild(indexProxTranslate);
                       indexProxTranslate.addChild(indexProx);
                         indexProx.addChild(indexProxRotate);
                           indexProxRotate.addChild(indexProxTransform);
@@ -533,7 +535,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                       indexDisRotate.addChild(indexDisTransform);
                                         indexDisTransform.addChild(indexDisShape); // index distal
 
-                    palmRotationZ.addChild(thumbProxTranslate);
+                    palmRotation.addChild(thumbProxTranslate);
                       thumbProxTranslate.addChild(thumbProx);
                         thumbProx.addChild(thumbProxRotate);
                           thumbProxRotate.addChild(thumbProxTransform);
