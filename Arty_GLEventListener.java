@@ -240,10 +240,10 @@ public class Arty_GLEventListener implements GLEventListener {
     float palmWidth = 3f;
     
 
-    float fingerWidth = 0.15f;
+    float fingerWidth = 0.5f;
     float fingerDepth = 0.5f;
 
-    float pinkyHeight = 0.3f;
+    float pinkyHeight = 0.5f;
 
     float ringProxHeight = 0.4f;
     float ringMiddleHeight = 0.4f;
@@ -277,7 +277,7 @@ public class Arty_GLEventListener implements GLEventListener {
     palmRotationZ = new TransformNode("rotate palm z",Mat4Transform.rotateAroundZ(0));
 
     // pinky proximal
-    TransformNode pinkyProxTranslate = new TransformNode("pinky proximal translate", Mat4Transform.translate(-(palmWidth/9)-1, 0, 0));
+    TransformNode pinkyProxTranslate = new TransformNode("pinky proximal translate", Mat4Transform.translate(-(palmWidth/5), palmHeight, 0));
     m = new Mat4(1);
     m = Mat4.multiply(m, Mat4Transform.scale(fingerWidth,pinkyHeight,fingerDepth));
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
@@ -397,13 +397,14 @@ public class Arty_GLEventListener implements GLEventListener {
                       pinkyProxTranslate.addChild(pinkyProx);
                         pinkyProx.addChild(pinkyProxTransform);
                           pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
-                          pinkyProxTransform.addChild(pinkyMiddleTranslate);
+                          pinkyProx.addChild(pinkyMiddleTranslate);
                             pinkyMiddleTranslate.addChild(pinkyMiddle);
-                            pinkyMiddle.addChild(pinkyMiddleTransform);
+                              pinkyMiddle.addChild(pinkyMiddleTransform);
                                 pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
-                                    // pinkyMiddle.addChild(pinkyDis);
-                                    //   pinkyDis.addChild(pinkyDisTransform);
-                                    //     pinkyDisTransform.addChild(pinkyDisShape); // pinky distal
+                              pinkyMiddle.addChild(pinkyDisTranslate);
+                                pinkyDisTranslate.addChild(pinkyDis);
+                                  pinkyDis.addChild(pinkyDisTransform); // pinky distal
+                                    pinkyDisTransform.addChild(pinkyDisShape);
 
                     // palmRotationZ.addChild(ringProx);
                     //   ringProx.addChild(ringProxTransform);
