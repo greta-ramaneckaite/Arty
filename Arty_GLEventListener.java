@@ -85,7 +85,7 @@ public class Arty_GLEventListener implements GLEventListener {
    *
    */
    
-  private boolean animation = false, animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false;
+  private boolean animation = false, animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false, animationThumbY = false;
   private double savedTime = 0;
    
   public void startAnimation() {
@@ -180,14 +180,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
   
   public void rotateThumbY() {
-    stopAnimation();
-    thumbY -= 10;
-    thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbY));
-    thumbProxRotateY.update();
-    thumbMiddleRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
-    thumbMiddleRotate.update();
-    thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
-    thumbDisRotate.update();
+    animationThumbY = true;
+    if (thumbY <= -180) thumbY = 0;
   }
 
   public void rotateThumbZ() {
@@ -586,6 +580,7 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationMiddleX) updateMiddleX();
     if (animationRingX) updateRingX();
     if (animationPinkyX) updatePinkyX();
+    if (animationThumbY) updateThumbY();
     hand.draw(gl);
   }
     
@@ -688,6 +683,27 @@ public class Arty_GLEventListener implements GLEventListener {
       pinkyMiddleRotate.update();
       pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyPos));
       pinkyDisRotate.update();
+    }
+  }
+
+  private void updateThumbY() {
+    thumbY -= 1;
+    if (thumbY >= -90) {
+      thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbY));
+      thumbProxRotateY.update();
+      thumbMiddleRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
+      thumbMiddleRotate.update();
+      thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
+      thumbDisRotate.update();
+    } else if (thumbY < -90 && thumbY >= -180){
+      int i = thumbY + 90;
+      int thumbPos = -90 + (-i);
+      thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbPos));
+      thumbProxRotateY.update();
+      thumbMiddleRotate.setTransform(Mat4Transform.rotateAroundY(thumbPos));
+      thumbMiddleRotate.update();
+      thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbPos));
+      thumbDisRotate.update();
     }
   }
   
