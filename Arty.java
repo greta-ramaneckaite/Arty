@@ -64,6 +64,9 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("DO E");
       b.addActionListener(this);
       p.add(b);
+      b = new JButton("DO CUSTOM");
+      b.addActionListener(this);
+      p.add(b);
       b = new JButton("rotate wrist");
       b.addActionListener(this);
       p.add(b);
@@ -137,6 +140,9 @@ public class Arty extends JFrame implements ActionListener {
     }
     else if (e.getActionCommand().equalsIgnoreCase("DO E")) {
       glEventListener.doE();
+    }
+    else if (e.getActionCommand().equalsIgnoreCase("DO CUSTOM")) {
+      glEventListener.doCustom();
     }
     else if (e.getActionCommand().equalsIgnoreCase("rotate wrist")) {
       glEventListener.doG();
