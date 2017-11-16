@@ -558,7 +558,9 @@ public class Arty_GLEventListener implements GLEventListener {
     hand.update();
   }
 
-  private int delayTime = 0, renderCount = 0;
+  private int delayTime = 0, palmZcount = 0;
+  private int indexXcount = 0, middleXcount = 0, ringXcount = 0, pinkyXcount = 0;
+  private int indexZcount = 0, middleZcount = 0, ringZcount = 0, pinkyZcount = 0;
  
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -572,18 +574,31 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationIndexX) {
       if (indexX <= 90) {
         updateIndexXForward();
-        renderCount++;
+        indexXcount++;
       } else {
-        if (renderCount >= 200) {
+        if (indexXcount >= 200) {
           updateIndexXBackward();
-          if (indexX >= 180) renderCount = 0;
+          if (indexX >= 180) indexXcount = 0;
         } else {
-          renderCount++;
+          indexXcount++;
         }
       }
     }
 
-    if (animationMiddleX) updateMiddleX();
+    if (animationMiddleX) {
+      if (middleX <= 90) {
+        updateMiddleXForward();
+        middleXcount++;
+      } else {
+        if (middleXcount >= 200) {
+          updateMiddleXBackward();
+          if (middleX >= 180) middleXcount = 0;
+        } else {
+          middleXcount++;
+        }
+      }
+    }
+
     if (animationRingX) updateRingX();
     if (animationPinkyX) updatePinkyX();
     if (animationThumbY) updateThumbY();
@@ -591,13 +606,13 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationPalmZ) {
       if (palmZ <= 90) {
         updatePalmZForward();
-        renderCount++;
+        palmZcount++;
       } else {
-        if (renderCount >= 200) {
+        if (palmZcount >= 200) {
           updatePalmZBackward();
-          if (palmZ >= 180) renderCount = 0;
+          if (palmZ >= 180) palmZcount = 0;
         } else {
-          renderCount++;
+          palmZcount++;
         }
       }
     }
@@ -687,7 +702,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateMiddleX() {
+  private void updateMiddleXForward() {
     middleX += 1;
     if (middleX <= 90) {
       middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
@@ -696,7 +711,12 @@ public class Arty_GLEventListener implements GLEventListener {
       middleMiddleRotate.update();
       middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
       middleDisRotate.update();
-    } else if (middleX > 90 && middleX <= 180){
+    }
+  }
+
+  private void updateMiddleXBackward() {
+    middleX += 1;
+    if (middleX > 90 && middleX <= 180){
       int i = middleX - 90;
       int middlePos = 90 - i;
       middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middlePos));
