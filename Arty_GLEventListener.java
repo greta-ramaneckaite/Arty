@@ -174,11 +174,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotatePinkyZ() {
-    stopAnimation();
-    pinkyZ += 10;
-    pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyZ));
-    pinkyProxRotateZ.update();
-    
+    animationPinkyZ = true;
+    if (pinkyZ >= 40) pinkyZ = 0;
   }
   
   public void rotateThumbY() {
@@ -582,6 +579,10 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationPinkyX) updatePinkyX();
     if (animationThumbY) updateThumbY();
 
+    // if (animationIndexZ) updateIndexZ();
+    // if (animationMiddleZ) updateMiddleZ();
+    // if (animationRingZ) updateRingZ();
+    if (animationPinkyZ) updatePinkyZ();
     if (animationThumbZ) updateThumbZ();
     hand.draw(gl);
   }
@@ -688,6 +689,19 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
+  private void updatePinkyZ() {
+    pinkyZ += 1;
+    if (pinkyZ <= 20) {
+      pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyZ));
+      pinkyProxRotateZ.update();
+    } else if (pinkyZ > 20 && pinkyZ <= 40) {
+      int i = pinkyZ - 20;
+      int pinkyPos = 20 - i;
+      pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyPos));
+      pinkyProxRotateZ.update();
+    }
+  }
+
   private void updateThumbY() {
     thumbY -= 1;
     if (thumbY >= -90) {
@@ -710,7 +724,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   private void updateThumbZ() {
-    thumbZ+= 1;
+    thumbZ += 1;
     if (thumbZ <= 90) {
       thumbProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(thumbZ));
       thumbProxRotateZ.update();
