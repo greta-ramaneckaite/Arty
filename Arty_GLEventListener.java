@@ -557,6 +557,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
     hand.update();
   }
+
+  private int delayTime = 0, renderCount = 0;
  
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -573,7 +575,22 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationPinkyX) updatePinkyX();
     if (animationThumbY) updateThumbY();
 
-    if (animationPalmZ) updatePalmZ();
+    if (animationPalmZ) {
+      if (palmZ <= 90) {
+        updatePalmZForward();
+        renderCount++;
+      } else {
+        if (renderCount >= 200) {
+          updatePalmZBackward();
+          if (palmZ >= 180) renderCount = 0;
+        } else {
+          renderCount++;
+        }
+      }
+    }
+
+
+
     if (animationIndexZ) updateIndexZ();
     if (animationMiddleZ) updateMiddleZ();
     if (animationRingZ) updateRingZ();
@@ -600,12 +617,23 @@ public class Arty_GLEventListener implements GLEventListener {
     cube2.dispose(gl);
   }
 
-  private void updatePalmZ() {
+  private void updatePalmZForward() {
     palmZ += 1;
     if (palmZ <= 90) {
       palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmZ));
       palmRotateZ.update();
-    } else if (palmZ > 90 && palmZ <= 180) {
+    } 
+    // else if (palmZ > 90 && palmZ <= 180) {
+    //   int i = palmZ - 90;
+    //   int palmPos = 90 - i;
+    //   palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmPos));
+    //   palmRotateZ.update();
+    // }
+  }
+
+  private void updatePalmZBackward() {
+  palmZ += 1;
+    if (palmZ > 90 && palmZ <= 180) {
       int i = palmZ - 90;
       int palmPos = 90 - i;
       palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmPos));
