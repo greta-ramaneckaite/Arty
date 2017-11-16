@@ -663,7 +663,7 @@ public class Arty_GLEventListener implements GLEventListener {
       } else {
         if (thumbYcount >= 200) {
           updateThumbYBackward();
-          if (thumbY >= 180) thumbYcount = 0;
+          if (thumbY <= -180) thumbYcount = 0;
         } else {
           thumbYcount++;
         }
