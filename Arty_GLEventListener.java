@@ -133,6 +133,14 @@ public class Arty_GLEventListener implements GLEventListener {
     rotateRingX();
     rotateThumbY();
   }
+
+  public void doE() {
+    rotatePinkyX();
+    rotateRingX();
+    rotateMiddleX();
+    rotateIndexX();
+    rotateThumbY();
+  }
   
   public void rotateWrist() {
     stopAnimation();
