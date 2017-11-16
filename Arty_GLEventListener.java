@@ -655,12 +655,62 @@ public class Arty_GLEventListener implements GLEventListener {
       }
     }
 
+    if (animationIndexZ) {
+      if (indexZ >= -20) {
+        updateIndexZForward();
+        indexZcount++;
+      } else {
+        if (indexZcount >= 270) {
+          updateIndexZBackward();
+          if (indexZ <= -40) indexZcount = 0;
+        } else {
+          indexZcount++;
+        }
+      }
+    }
 
+    if (animationMiddleZ) {
+      if (middleZ >= -20) {
+        updateMiddleZForward();
+        middleZcount++;
+      } else {
+        if (middleZcount >= 270) {
+          updateMiddleZBackward();
+          if (middleZ <= -40) middleZcount = 0;
+        } else {
+          middleZcount++;
+        }
+      }
+    }
 
-    if (animationIndexZ) updateIndexZ();
-    if (animationMiddleZ) updateMiddleZ();
-    if (animationRingZ) updateRingZ();
-    if (animationPinkyZ) updatePinkyZ();
+    if (animationRingZ) {
+      if (ringZ <= 20) {
+        updateRingZForward();
+        ringZcount++;
+      } else {
+        if (ringZcount >= 270) {
+          updateRingZBackward();
+          if (ringZ >= 40) ringZcount = 0;
+        } else {
+          ringZcount++;
+        }
+      }
+    }
+
+    if (animationPinkyZ) {
+      if (pinkyZ <= 20) {
+        updatePinkyZForward();
+        pinkyZcount++;
+      } else {
+        if (pinkyZcount >= 270) {
+          updatePinkyZBackward();
+          if (pinkyZ >= 40) pinkyZcount = 0;
+        } else {
+          pinkyZcount++;
+        }
+      }
+    }
+
     if (animationThumbZ) updateThumbZ();
     hand.draw(gl);
   }
@@ -727,12 +777,17 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateIndexZ() {
+  private void updateIndexZForward() {
     indexZ -= 1;
     if (indexZ >= -20) {
       indexProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(indexZ));
       indexProxRotateZ.update();
-    } else if (indexZ < -20 && indexZ >= -40){
+    }
+  }
+
+  private void updateIndexZBackward() {
+    indexZ -= 1;
+    if (indexZ < -20 && indexZ >= -40){
       int i = indexZ + 20;
       int indexPos = -20 + (-i);
       indexProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(indexPos));
@@ -766,12 +821,17 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateMiddleZ() {
+  private void updateMiddleZForward() {
     middleZ -= 1;
     if (middleZ >= -20) {
       middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middleZ));
       middleProxRotateZ.update();
-    } else if (middleZ < -20 && middleZ >= -40){
+    }
+  }
+
+  private void updateMiddleZBackward() {
+    middleZ -= 1;
+    if (middleZ < -20 && middleZ >= -40){
       int i = middleZ + 20;
       int middlePos = -20 + (-i);
       middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middlePos));
@@ -805,12 +865,17 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateRingZ() {
+  private void updateRingZForward() {
     ringZ += 1;
     if (ringZ <= 20) {
       ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringZ));
       ringProxRotateZ.update();
-    } else if (ringZ > 20 && ringZ <= 40) {
+    }
+  }
+
+  private void updateRingZBackward() {
+    ringZ += 1;
+    if (ringZ > 20 && ringZ <= 40) {
       int i = ringZ - 20;
       int ringPos = 20 - i;
       ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringPos));
@@ -844,12 +909,17 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updatePinkyZ() {
+  private void updatePinkyZForward() {
     pinkyZ += 1;
     if (pinkyZ <= 20) {
       pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyZ));
       pinkyProxRotateZ.update();
-    } else if (pinkyZ > 20 && pinkyZ <= 40) {
+    }
+  }
+
+  private void updatePinkyZBackward() {
+    pinkyZ += 1;
+    if (pinkyZ > 20 && pinkyZ <= 40) {
       int i = pinkyZ - 20;
       int pinkyPos = 20 - i;
       pinkyProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(pinkyPos));
