@@ -599,8 +599,34 @@ public class Arty_GLEventListener implements GLEventListener {
       }
     }
 
-    if (animationRingX) updateRingX();
-    if (animationPinkyX) updatePinkyX();
+    if (animationRingX) {
+      if (ringX <= 90) {
+        updateRingXForward();
+        ringXcount++;
+      } else {
+        if (ringXcount >= 200) {
+          updateRingXBackward();
+          if (ringX >= 180) ringXcount = 0;
+        } else {
+          ringXcount++;
+        }
+      }
+    }
+
+    if (animationPinkyX) {
+      if (pinkyX <= 90) {
+        updatePinkyXForward();
+        pinkyXcount++;
+      } else {
+        if (pinkyXcount >= 200) {
+          updatePinkyXBackward();
+          if (pinkyX >= 180) pinkyXcount = 0;
+        } else {
+          pinkyXcount++;
+        }
+      }
+    }
+
     if (animationThumbY) updateThumbY();
 
     if (animationPalmZ) {
@@ -741,7 +767,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateRingX() {
+  private void updateRingXForward() {
     ringX += 1;
     if (ringX <= 90) {
       ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringX));
@@ -750,7 +776,12 @@ public class Arty_GLEventListener implements GLEventListener {
       ringMiddleRotate.update();
       ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
       ringDisRotate.update();
-    } else if (ringX > 90 && ringX <= 180){
+    }
+  }
+
+  private void updateRingXBackward() {
+    ringX += 1;
+    if (ringX > 90 && ringX <= 180){
       int i = ringX - 90;
       int ringPos = 90 - i;
       ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringPos));
@@ -775,7 +806,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updatePinkyX() {
+  private void updatePinkyXForward() {
     pinkyX += 1;
     if (pinkyX <= 90) {
       pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyX));
@@ -784,7 +815,12 @@ public class Arty_GLEventListener implements GLEventListener {
       pinkyMiddleRotate.update();
       pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
       pinkyDisRotate.update();
-    } else if (pinkyX > 90 && pinkyX <= 180){
+    }
+  }
+
+  private void updatePinkyXBackward() {
+    pinkyX += 1;
+    if (pinkyX > 90 && pinkyX <= 180){
       int i = pinkyX - 90;
       int pinkyPos = 90 - i;
       pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyPos));
