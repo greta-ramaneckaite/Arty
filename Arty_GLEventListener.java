@@ -143,15 +143,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateMiddleX() {
-    // stopAnimation();
-    // middleX += 10;
-    // middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
-    // middleProxRotateX.update();
-    // middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
-    // middleMiddleRotate.update();
-    // middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
-    // middleDisRotate.update();
     animationMiddleX = true;
+    if (middleX >= 180) middleX = 0;
   }
 
   public void rotateMiddleZ() {
@@ -162,14 +155,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateRingX() {
-    stopAnimation();
-    ringX += 10;
-    ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringX));
-    ringProxRotateX.update();
-    ringMiddleRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
-    ringMiddleRotate.update();
-    ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
-    ringDisRotate.update();
+    animationRingX = true;
+    if (ringX >= 180) ringX = 0;
   }
 
   public void rotateRingZ() {
@@ -180,14 +167,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotatePinkyX() {
-    stopAnimation();
-    pinkyX += 10;
-    pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyX));
-    pinkyProxRotateX.update();
-    pinkyMiddleRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
-    pinkyMiddleRotate.update();
-    pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
-    pinkyDisRotate.update();
+    animationPinkyX = true;
+    if (pinkyX >= 180) pinkyX = 0;
   }
 
   public void rotatePinkyZ() {
@@ -603,6 +584,8 @@ public class Arty_GLEventListener implements GLEventListener {
     
     if (animationIndexX) updateIndexX();
     if (animationMiddleX) updateMiddleX();
+    if (animationRingX) updateRingX();
+    if (animationPinkyX) updatePinkyX();
     hand.draw(gl);
   }
     
@@ -654,6 +637,57 @@ public class Arty_GLEventListener implements GLEventListener {
       middleMiddleRotate.update();
       middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
       middleDisRotate.update();
+    } else if (middleX > 90 && middleX <= 180){
+      int i = middleX - 90;
+      int middlePos = 90 - i;
+      middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middlePos));
+      middleProxRotateX.update();
+      middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middlePos));
+      middleMiddleRotate.update();
+      middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middlePos));
+      middleDisRotate.update();
+    }
+  }
+
+  private void updateRingX() {
+    ringX += 1;
+    if (ringX <= 90) {
+      ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringX));
+      ringProxRotateX.update();
+      ringMiddleRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
+      ringMiddleRotate.update();
+      ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringX));
+      ringDisRotate.update();
+    } else if (ringX > 90 && ringX <= 180){
+      int i = ringX - 90;
+      int ringPos = 90 - i;
+      ringProxRotateX.setTransform(Mat4Transform.rotateAroundX(ringPos));
+      ringProxRotateX.update();
+      ringMiddleRotate.setTransform(Mat4Transform.rotateAroundX(ringPos));
+      ringMiddleRotate.update();
+      ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringPos));
+      ringDisRotate.update();
+    }
+  }
+
+  private void updatePinkyX() {
+    pinkyX += 1;
+    if (pinkyX <= 90) {
+      pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyX));
+      pinkyProxRotateX.update();
+      pinkyMiddleRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
+      pinkyMiddleRotate.update();
+      pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyX));
+      pinkyDisRotate.update();
+    } else if (pinkyX > 90 && pinkyX <= 180){
+      int i = pinkyX - 90;
+      int pinkyPos = 90 - i;
+      pinkyProxRotateX.setTransform(Mat4Transform.rotateAroundX(pinkyPos));
+      pinkyProxRotateX.update();
+      pinkyMiddleRotate.setTransform(Mat4Transform.rotateAroundX(pinkyPos));
+      pinkyMiddleRotate.update();
+      pinkyDisRotate.setTransform(Mat4Transform.rotateAroundX(pinkyPos));
+      pinkyDisRotate.update();
     }
   }
   
