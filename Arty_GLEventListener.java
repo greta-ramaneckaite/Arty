@@ -88,7 +88,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private boolean animation = false;
   private boolean animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false, animationThumbY = false;
   private boolean animationIndexZ = false, animationMiddleZ = false, animationRingZ = false, animationPinkyZ = false, animationThumbZ = false;
-  private boolean animationPalmZ = false, animationIndexZInvert = false;
+  private boolean animationPalmZ = false, animationIndexZInvert = false, animationMiddleXBack = false;
   private double savedTime = 0;
    
   public void startAnimation() {
@@ -129,6 +129,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
   public void doR() {
     rotateIndexZInvert();
+    rotateMiddleXBack();
     rotatePinkyX();
     rotateRingX();
     rotateThumbY();
@@ -173,6 +174,11 @@ public class Arty_GLEventListener implements GLEventListener {
   public void rotateMiddleX() {
     animationMiddleX = true;
     if (middleX >= 180) middleX = 0;
+  }
+
+  public void rotateMiddleXBack() {
+    animationMiddleXBack = true;
+    if (middleX >= -40) middleXback = 0;
   }
 
   public void rotateMiddleZ() {
@@ -225,7 +231,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private float xPosition = 0;
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
-  private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0;
+  private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0, middleXback;
   private int indexZ = 0, middleZ = 0, ringZ = 0, pinkyZ = 0, palmZ = 0, indexZinvert = 0;
 
   private TransformNode translateX, handMoveTranslate, wristRotation, palmRotateZ;
@@ -590,6 +596,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private int delayTime = 0, palmZcount = 0;
   private int indexXcount = 0, middleXcount = 0, ringXcount = 0, pinkyXcount = 0, thumbYcount = 0;
   private int indexZcount = 0, middleZcount = 0, ringZcount = 0, pinkyZcount = 0, thumbZcount = 0, indexZcountInvert = 0;
+  private int middleXcountBack = 0;
  
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -624,6 +631,20 @@ public class Arty_GLEventListener implements GLEventListener {
           if (middleX >= 180) middleXcount = 0;
         } else {
           middleXcount++;
+        }
+      }
+    }
+
+    if (animationMiddleXBack) {
+      if (middleXback >= -20) {
+        updateMiddleXBackForward();
+        middleXcountBack++;
+      } else {
+        if (middleXcountBack >= 270) {
+          updateMiddleXBackBackward();
+          if (middleXback <= -40) middleXcountBack = 0;
+        } else {
+          middleXcountBack++;
         }
       }
     }
@@ -893,6 +914,24 @@ public class Arty_GLEventListener implements GLEventListener {
       middleMiddleRotate.update();
       middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middlePos));
       middleDisRotate.update();
+    }
+  }
+
+  private void updateMiddleXBackForward() {
+    middleXback -= 1;
+    if (middleXback >= -20) {
+      middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleXback));
+      middleProxRotateX.update();
+    }
+  }
+
+  private void updateMiddleXBackBackward() {
+    middleXback -= 1;
+    if (middleXback < -20 && middleXback >= -40){
+      int i = middleXback + 20;
+      int middlePos = -20 + (-i);
+      middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middlePos));
+      middleProxRotateX.update();
     }
   }
 
