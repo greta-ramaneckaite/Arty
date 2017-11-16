@@ -132,6 +132,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
   public void rotateIndexX() {
     animationIndexX = true;
+    if (indexX >= 180) indexX = 0;
   }
 
   public void rotateIndexZ() {
