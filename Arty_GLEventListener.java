@@ -85,7 +85,7 @@ public class Arty_GLEventListener implements GLEventListener {
    *
    */
    
-  private boolean animation = false;
+  private boolean animation = false, animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false;
   private double savedTime = 0;
    
   public void startAnimation() {
@@ -131,14 +131,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateIndexX() {
-    stopAnimation();
-    indexX += 10;
-    indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexX));
-    indexProxRotateX.update();
-    indexMiddleRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
-    indexMiddleRotate.update();
-    indexDisRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
-    indexDisRotate.update();
+    animationIndexX = true;
   }
 
   public void rotateIndexZ() {
@@ -149,14 +142,15 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateMiddleX() {
-    stopAnimation();
-    middleX += 10;
-    middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
-    middleProxRotateX.update();
-    middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
-    middleMiddleRotate.update();
-    middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
-    middleDisRotate.update();
+    // stopAnimation();
+    // middleX += 10;
+    // middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
+    // middleProxRotateX.update();
+    // middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
+    // middleMiddleRotate.update();
+    // middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
+    // middleDisRotate.update();
+    animationMiddleX = true;
   }
 
   public void rotateMiddleZ() {
@@ -606,7 +600,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
     floor.render(gl); 
     
-    // if (animation) updateLeftArm();
+    if (animationIndexX) updateIndexX();
+    if (animationMiddleX) updateMiddleX();
     hand.draw(gl);
   }
     
@@ -628,15 +623,38 @@ public class Arty_GLEventListener implements GLEventListener {
     cube2.dispose(gl);
   }
   
-  // private void updateLeftArm() {
-  //   double elapsedTime = getSeconds()-startTime;
-  //   float rotateAngle = 180f+90f*(float)Math.sin(elapsedTime);
-  //   leftArmRotate.setTransform(Mat4Transform.rotateAroundX(rotateAngle));
-  //   leftArmRotate.update();
-  //   rotateAngle = -rotateAngle;
-  //   rightArmRotate.setTransform(Mat4Transform.rotateAroundX(rotateAngle));
-  //   rightArmRotate.update();
-  // }
+  private void updateIndexX() {
+    indexX += 1;
+    if (indexX <= 90) {
+      indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexX));
+      indexProxRotateX.update();
+      indexMiddleRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
+      indexMiddleRotate.update();
+      indexDisRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
+      indexDisRotate.update();
+    } else if (indexX > 90 && indexX <= 180){
+      int i = indexX - 90;
+      int indexPos = 90 - i;
+      indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexPos));
+      indexProxRotateX.update();
+      indexMiddleRotate.setTransform(Mat4Transform.rotateAroundX(indexPos));
+      indexMiddleRotate.update();
+      indexDisRotate.setTransform(Mat4Transform.rotateAroundX(indexPos));
+      indexDisRotate.update();
+    }
+  }
+
+  private void updateMiddleX() {
+    middleX += 1;
+    if (middleX <= 90) {
+      middleProxRotateX.setTransform(Mat4Transform.rotateAroundX(middleX));
+      middleProxRotateX.update();
+      middleMiddleRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
+      middleMiddleRotate.update();
+      middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middleX));
+      middleDisRotate.update();
+    }
+  }
   
   // The light's postion is continually being changed, so needs to be calculated for each frame.
   private Vec3 getLightPosition() {
@@ -645,7 +663,7 @@ public class Arty_GLEventListener implements GLEventListener {
     float y = 2.7f;
     float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     return new Vec3(x,y,z);   
-    //return new Vec3(5f,3.4f,5f);
+    // return new Vec3(5f,3.4f,5f);
   }
   
 }
