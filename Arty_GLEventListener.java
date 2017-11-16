@@ -88,6 +88,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private boolean animation = false;
   private boolean animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false, animationThumbY = false;
   private boolean animationIndexZ = false, animationMiddleZ = false, animationRingZ = false, animationPinkyZ = false, animationThumbZ = false;
+  private boolean animationPalmZ = false;
   private double savedTime = 0;
    
   public void startAnimation() {
@@ -126,10 +127,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
    
   public void rotatePalmZ() {
-    stopAnimation();
-    zPosition += 10;
-    palmRotation.setTransform(Mat4Transform.rotateAroundZ(zPosition));
-    palmRotation.update();    
+    animationPalmZ = true;
+    if (palmZ >= 180) palmZ = 0;    
   }
 
   public void rotateIndexX() {
@@ -198,8 +197,9 @@ public class Arty_GLEventListener implements GLEventListener {
   private int yPosition = 0;
   private int zPosition = 0, fingerX = 0;
   private int indexX = 0, middleX = 0, ringX = 0, pinkyX = 0, thumbY = 0, thumbZ = 0;
-  private int indexZ = 0, middleZ = 0, ringZ = 0, pinkyZ = 0;
-  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotation;
+  private int indexZ = 0, middleZ = 0, ringZ = 0, pinkyZ = 0, palmZ = 0;
+
+  private TransformNode translateX, handMoveTranslate, wristRotation, palmRotateZ;
   private TransformNode indexProxRotateX, indexMiddleRotate, indexDisRotate, indexProxRotateZ;
   private TransformNode middleProxRotateX, middleMiddleRotate, middleDisRotate, middleProxRotateZ;
   private TransformNode ringProxRotateX, ringMiddleRotate, ringDisRotate, ringProxRotateZ;
@@ -315,7 +315,7 @@ public class Arty_GLEventListener implements GLEventListener {
     m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
     TransformNode palmTransform = new TransformNode("palm transform", m);
     
-    palmRotation = new TransformNode("rotate palm",Mat4Transform.rotateAroundZ(0));
+    palmRotateZ = new TransformNode("rotate palm",Mat4Transform.rotateAroundZ(0));
 
     // pinky proximal
     TransformNode pinkyProxTranslate = new TransformNode("pinky proximal translate", Mat4Transform.translate(-positionOutside, palmHeight, 0));
@@ -465,11 +465,11 @@ public class Arty_GLEventListener implements GLEventListener {
             wristRotation.addChild(palm);
 
             palm.addChild(palmTranslate);
-              palmTranslate.addChild(palmRotation);
-                palmRotation.addChild(palmTransform);
+              palmTranslate.addChild(palmRotateZ);
+                palmRotateZ.addChild(palmTransform);
                   palmTransform.addChild(palmShape);
 
-              palmRotation.addChild(pinkyProxTranslate);
+              palmRotateZ.addChild(pinkyProxTranslate);
                 pinkyProxTranslate.addChild(pinkyProx);
                   pinkyProx.addChild(pinkyProxRotateX);
                     pinkyProxRotateX.addChild(pinkyProxRotateZ);
@@ -486,7 +486,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                   pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
                                     pinkyDisTransform.addChild(pinkyDisShape);
 
-              palmRotation.addChild(ringProxTranslate);
+              palmRotateZ.addChild(ringProxTranslate);
                 ringProxTranslate.addChild(ringProx);
                   ringProx.addChild(ringProxRotateX);
                     ringProxRotateX.addChild(ringProxRotateZ);
@@ -503,7 +503,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                   ringDisRotate.addChild(ringDisTransform);
                                     ringDisTransform.addChild(ringDisShape); // ring distal
 
-              palmRotation.addChild(middleProxTranslate);
+              palmRotateZ.addChild(middleProxTranslate);
                 middleProxTranslate.addChild(middleProx);
                   middleProx.addChild(middleProxRotateX);
                     middleProxRotateX.addChild(middleProxRotateZ);
@@ -520,7 +520,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                   middleDisRotate.addChild(middleDisTransform);
                                     middleDisTransform.addChild(middleDisShape); // middle distal
 
-              palmRotation.addChild(indexProxTranslate);
+              palmRotateZ.addChild(indexProxTranslate);
                 indexProxTranslate.addChild(indexProx);
                   indexProx.addChild(indexProxRotateX);
                     indexProxRotateX.addChild(indexProxRotateZ);
@@ -537,7 +537,7 @@ public class Arty_GLEventListener implements GLEventListener {
                                   indexDisRotate.addChild(indexDisTransform);
                                     indexDisTransform.addChild(indexDisShape); // index distal
 
-              palmRotation.addChild(thumbProxTranslate);
+              palmRotateZ.addChild(thumbProxTranslate);
                 thumbProxTranslate.addChild(thumbProx);
                   thumbProx.addChild(thumbProxRotateY);
                     thumbProxRotateY.addChild(thumbProxRotateZ);
@@ -573,6 +573,7 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationPinkyX) updatePinkyX();
     if (animationThumbY) updateThumbY();
 
+    if (animationPalmZ) updatePalmZ();
     if (animationIndexZ) updateIndexZ();
     if (animationMiddleZ) updateMiddleZ();
     if (animationRingZ) updateRingZ();
@@ -597,6 +598,19 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
+  }
+
+  private void updatePalmZ() {
+    palmZ += 1;
+    if (palmZ <= 90) {
+      palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmZ));
+      palmRotateZ.update();
+    } else if (palmZ > 90 && palmZ <= 180) {
+      int i = palmZ - 90;
+      int palmPos = 90 - i;
+      palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmPos));
+      palmRotateZ.update();
+    }
   }
   
   private void updateIndexX() {
