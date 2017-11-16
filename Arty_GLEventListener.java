@@ -162,10 +162,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateRingZ() {
-    stopAnimation();
-    ringZ += 10;
-    ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringZ));
-    ringProxRotateZ.update();
+    animationRingZ = true;
+    if (ringZ >= 40) ringZ = 0;
   }
 
   public void rotatePinkyX() {
@@ -581,7 +579,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
     // if (animationIndexZ) updateIndexZ();
     // if (animationMiddleZ) updateMiddleZ();
-    // if (animationRingZ) updateRingZ();
+    if (animationRingZ) updateRingZ();
     if (animationPinkyZ) updatePinkyZ();
     if (animationThumbZ) updateThumbZ();
     hand.draw(gl);
@@ -665,6 +663,19 @@ public class Arty_GLEventListener implements GLEventListener {
       ringMiddleRotate.update();
       ringDisRotate.setTransform(Mat4Transform.rotateAroundX(ringPos));
       ringDisRotate.update();
+    }
+  }
+
+  private void updateRingZ() {
+    ringZ += 1;
+    if (ringZ <= 20) {
+      ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringZ));
+      ringProxRotateZ.update();
+    } else if (ringZ > 20 && ringZ <= 40) {
+      int i = ringZ - 20;
+      int ringPos = 20 - i;
+      ringProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(ringPos));
+      ringProxRotateZ.update();
     }
   }
 
