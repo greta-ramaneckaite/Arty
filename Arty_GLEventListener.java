@@ -569,7 +569,20 @@ public class Arty_GLEventListener implements GLEventListener {
 
     floor.render(gl); 
     
-    if (animationIndexX) updateIndexX();
+    if (animationIndexX) {
+      if (indexX <= 90) {
+        updateIndexXForward();
+        renderCount++;
+      } else {
+        if (renderCount >= 200) {
+          updateIndexXBackward();
+          if (indexX >= 180) renderCount = 0;
+        } else {
+          renderCount++;
+        }
+      }
+    }
+
     if (animationMiddleX) updateMiddleX();
     if (animationRingX) updateRingX();
     if (animationPinkyX) updatePinkyX();
@@ -622,13 +635,7 @@ public class Arty_GLEventListener implements GLEventListener {
     if (palmZ <= 90) {
       palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmZ));
       palmRotateZ.update();
-    } 
-    // else if (palmZ > 90 && palmZ <= 180) {
-    //   int i = palmZ - 90;
-    //   int palmPos = 90 - i;
-    //   palmRotateZ.setTransform(Mat4Transform.rotateAroundZ(palmPos));
-    //   palmRotateZ.update();
-    // }
+    }
   }
 
   private void updatePalmZBackward() {
@@ -641,7 +648,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
   
-  private void updateIndexX() {
+  private void updateIndexXForward() {
     indexX += 1;
     if (indexX <= 90) {
       indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexX));
@@ -650,7 +657,12 @@ public class Arty_GLEventListener implements GLEventListener {
       indexMiddleRotate.update();
       indexDisRotate.setTransform(Mat4Transform.rotateAroundX(indexX));
       indexDisRotate.update();
-    } else if (indexX > 90 && indexX <= 180){
+    }
+  }
+
+  private void updateIndexXBackward() {
+    indexX += 1;
+    if (indexX > 90 && indexX <= 180){
       int i = indexX - 90;
       int indexPos = 90 - i;
       indexProxRotateX.setTransform(Mat4Transform.rotateAroundX(indexPos));
