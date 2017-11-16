@@ -150,10 +150,8 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void rotateMiddleZ() {
-    stopAnimation();
-    middleZ -= 10;
-    middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middleZ));
-    middleProxRotateZ.update();
+    animationMiddleZ = true;
+    if (middleZ <= -180) middleZ = 0;
   }
 
   public void rotateRingX() {
@@ -578,7 +576,7 @@ public class Arty_GLEventListener implements GLEventListener {
     if (animationThumbY) updateThumbY();
 
     // if (animationIndexZ) updateIndexZ();
-    // if (animationMiddleZ) updateMiddleZ();
+    if (animationMiddleZ) updateMiddleZ();
     if (animationRingZ) updateRingZ();
     if (animationPinkyZ) updatePinkyZ();
     if (animationThumbZ) updateThumbZ();
@@ -642,6 +640,19 @@ public class Arty_GLEventListener implements GLEventListener {
       middleMiddleRotate.update();
       middleDisRotate.setTransform(Mat4Transform.rotateAroundX(middlePos));
       middleDisRotate.update();
+    }
+  }
+
+  private void updateMiddleZ() {
+    middleZ -= 1;
+    if (middleZ >= -20) {
+      middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middleZ));
+      middleProxRotateZ.update();
+    } else if (middleZ < -20 && middleZ >= -40){
+      int i = middleZ + 20;
+      int middlePos = -20 + (-i);
+      middleProxRotateZ.setTransform(Mat4Transform.rotateAroundZ(middlePos));
+      middleProxRotateZ.update();
     }
   }
 
