@@ -118,6 +118,14 @@ public class Arty_GLEventListener implements GLEventListener {
     handMoveTranslate.setTransform(Mat4Transform.translate(xPosition,0,0));
     handMoveTranslate.update();
   }
+
+  public void doG() {
+    rotatePalmZ();
+    rotatePinkyX();
+    rotateRingX();
+    rotateMiddleX();
+    rotateThumbY();
+  }
   
   public void rotateWrist() {
     stopAnimation();
