@@ -559,7 +559,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   private int delayTime = 0, palmZcount = 0;
-  private int indexXcount = 0, middleXcount = 0, ringXcount = 0, pinkyXcount = 0;
+  private int indexXcount = 0, middleXcount = 0, ringXcount = 0, pinkyXcount = 0, thumbYcount = 0;
   private int indexZcount = 0, middleZcount = 0, ringZcount = 0, pinkyZcount = 0;
  
   private void render(GL3 gl) {
@@ -627,7 +627,19 @@ public class Arty_GLEventListener implements GLEventListener {
       }
     }
 
-    if (animationThumbY) updateThumbY();
+    if (animationThumbY) {
+      if (thumbY >= -90) {
+        updateThumbYForward();
+        thumbYcount++;
+      } else {
+        if (thumbYcount >= 200) {
+          updateThumbYBackward();
+          if (thumbY >= 180) thumbYcount = 0;
+        } else {
+          thumbYcount++;
+        }
+      }
+    }
 
     if (animationPalmZ) {
       if (palmZ <= 90) {
@@ -845,7 +857,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
 
-  private void updateThumbY() {
+  private void updateThumbYForward() {
     thumbY -= 1;
     if (thumbY >= -90) {
       thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbY));
@@ -854,7 +866,12 @@ public class Arty_GLEventListener implements GLEventListener {
       thumbMiddleRotate.update();
       thumbDisRotate.setTransform(Mat4Transform.rotateAroundY(thumbY));
       thumbDisRotate.update();
-    } else if (thumbY < -90 && thumbY >= -180){
+    }
+  }
+
+  private void updateThumbYBackward() {
+    thumbY -= 1;
+    if (thumbY < -90 && thumbY >= -180){
       int i = thumbY + 90;
       int thumbPos = -90 + (-i);
       thumbProxRotateY.setTransform(Mat4Transform.rotateAroundY(thumbPos));
