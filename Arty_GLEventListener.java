@@ -230,8 +230,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
   private Camera camera;
   private Mat4 perspective;
-  private Mesh floor, sphere, cube, cube2;
-  private Light light;
+  private Mesh floor, sphere, cube, cube2, sphere2;
+  private Light light, light2;
   private SGNode hand;
   
   private float xPosition = 0;
@@ -256,6 +256,8 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
     int[] textureId5 = TextureLibrary.loadTexture(gl, "textures/wattBook.jpg");
     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
+    int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/jup0vss1.jpg");
+    int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/jup0vss1_specular.jpg");
     
     // make meshes
     floor = new TwoTriangles(gl, textureId0);
@@ -263,9 +265,20 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere = new Sphere(gl, textureId1, textureId2);
     cube = new Cube(gl, textureId3, textureId4);
     cube2 = new Cube(gl, textureId5, textureId6);
+    sphere2 = new Sphere(gl, textureId7, textureId8);
 
     light = new Light(gl);
     light.setCamera(camera);
+
+    light2 = new Light(gl);
+    light2.setCamera(camera);
+
+    floor.setLight(light2);
+    sphere.setLight(light2);
+    cube.setLight(light2);
+    cube2.setLight(light2);
+    sphere2.setLight(light2);
+
     
     floor.setLight(light);
     floor.setCamera(camera);
@@ -274,7 +287,9 @@ public class Arty_GLEventListener implements GLEventListener {
     cube.setLight(light);
     cube.setCamera(camera);  
     cube2.setLight(light);
-    cube2.setCamera(camera);  
+    cube2.setCamera(camera);
+    sphere2.setLight(light);
+    sphere2.setCamera(camera);  
     
 
     MeshNode wristShape = new MeshNode("Cube(wrist)", cube);
@@ -294,7 +309,7 @@ public class Arty_GLEventListener implements GLEventListener {
     MeshNode thumbProxShape = new MeshNode("Cube(thumb proximal)", cube);
     MeshNode thumbMiddleShape = new MeshNode("Cube(thumb middle)", cube);
     MeshNode thumbDisShape = new MeshNode("Cube(thumb distal)", cube);
-    MeshNode ringShape = new MeshNode("Cube(ring)", cube2);
+    MeshNode ringShape = new MeshNode("Sphere(ring)", sphere2);
     
 
     hand = new NameNode("root");
@@ -345,8 +360,8 @@ public class Arty_GLEventListener implements GLEventListener {
     float thumbPositionY = 0.5f;
 
     float ringRHeight = 0.3f;
-    float ringRWidth = 0.7f;
-    float ringRDepth = 0.7f;
+    float ringRWidth = 0.9f;
+    float ringRDepth = 0.9f;
 
     // wrist
     Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
@@ -518,99 +533,99 @@ public class Arty_GLEventListener implements GLEventListener {
           wristTransform.addChild(wristShape);
             wristRotation.addChild(palm);
 
-            palm.addChild(palmTranslate);
-              palmTranslate.addChild(palmRotateZ);
-                palmRotateZ.addChild(palmTransform);
-                  palmTransform.addChild(palmShape);
+              palm.addChild(palmTranslate);
+                palmTranslate.addChild(palmRotateZ);
+                  palmRotateZ.addChild(palmTransform);
+                    palmTransform.addChild(palmShape);
 
-              palmRotateZ.addChild(pinkyProxTranslate);
-                pinkyProxTranslate.addChild(pinkyProx);
-                  pinkyProx.addChild(pinkyProxRotateX);
-                    pinkyProxRotateX.addChild(pinkyProxRotateZ);
-                      pinkyProxRotateZ.addChild(pinkyProxTransform);
-                        pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
-                      pinkyProxRotateZ.addChild(pinkyMiddleTranslate);
-                        pinkyMiddleTranslate.addChild(pinkyMiddle);
-                          pinkyMiddle.addChild(pinkyMiddleRotate);
-                            pinkyMiddleRotate.addChild(pinkyMiddleTransform);
-                              pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
-                            pinkyMiddleRotate.addChild(pinkyDisTranslate);
-                              pinkyDisTranslate.addChild(pinkyDis);
-                                pinkyDis.addChild(pinkyDisRotate);
-                                  pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
-                                    pinkyDisTransform.addChild(pinkyDisShape);
+                palmRotateZ.addChild(pinkyProxTranslate);
+                  pinkyProxTranslate.addChild(pinkyProx);
+                    pinkyProx.addChild(pinkyProxRotateX);
+                      pinkyProxRotateX.addChild(pinkyProxRotateZ);
+                        pinkyProxRotateZ.addChild(pinkyProxTransform);
+                          pinkyProxTransform.addChild(pinkyProxShape); // pinky proximal
+                        pinkyProxRotateZ.addChild(pinkyMiddleTranslate);
+                          pinkyMiddleTranslate.addChild(pinkyMiddle);
+                            pinkyMiddle.addChild(pinkyMiddleRotate);
+                              pinkyMiddleRotate.addChild(pinkyMiddleTransform);
+                                pinkyMiddleTransform.addChild(pinkyMiddleShape); // pinky middle
+                              pinkyMiddleRotate.addChild(pinkyDisTranslate);
+                                pinkyDisTranslate.addChild(pinkyDis);
+                                  pinkyDis.addChild(pinkyDisRotate);
+                                    pinkyDisRotate.addChild(pinkyDisTransform); // pinky distal
+                                      pinkyDisTransform.addChild(pinkyDisShape);
 
-              palmRotateZ.addChild(ringProxTranslate);
-                ringProxTranslate.addChild(ringProx);
-                  ringProx.addChild(ringProxRotateX);
-                    ringProxRotateX.addChild(ringProxRotateZ);
-                      ringProxRotateZ.addChild(ringProxTransform);
-                        ringProxTransform.addChild(ringProxShape); // ring proximal
-                      ringProxRotateZ.addChild(ringTranslate);
-                        ringTranslate.addChild(ring);
-                          ring.addChild(ringTransform);
-                            ringTransform.addChild(ringShape);
-                      ringProxRotateZ.addChild(ringMiddleTranslate);
-                        ringMiddleTranslate.addChild(ringMiddle);
-                          ringMiddle.addChild(ringMiddleRotate);
-                            ringMiddleRotate.addChild(ringMiddleTransform);
-                              ringMiddleTransform.addChild(ringMiddleShape); // ring middle
-                            ringMiddleRotate.addChild(ringDisTranslate);
-                              ringDisTranslate.addChild(ringDis);
-                                ringDis.addChild(ringDisRotate);
-                                  ringDisRotate.addChild(ringDisTransform);
-                                    ringDisTransform.addChild(ringDisShape); // ring distal
+                palmRotateZ.addChild(ringProxTranslate);
+                  ringProxTranslate.addChild(ringProx);
+                    ringProx.addChild(ringProxRotateX);
+                      ringProxRotateX.addChild(ringProxRotateZ);
+                        ringProxRotateZ.addChild(ringProxTransform);
+                          ringProxTransform.addChild(ringProxShape); // ring proximal
+                        ringProxRotateZ.addChild(ringTranslate);
+                          ringTranslate.addChild(ring);
+                            ring.addChild(ringTransform);
+                              ringTransform.addChild(ringShape);
+                        ringProxRotateZ.addChild(ringMiddleTranslate);
+                          ringMiddleTranslate.addChild(ringMiddle);
+                            ringMiddle.addChild(ringMiddleRotate);
+                              ringMiddleRotate.addChild(ringMiddleTransform);
+                                ringMiddleTransform.addChild(ringMiddleShape); // ring middle
+                              ringMiddleRotate.addChild(ringDisTranslate);
+                                ringDisTranslate.addChild(ringDis);
+                                  ringDis.addChild(ringDisRotate);
+                                    ringDisRotate.addChild(ringDisTransform);
+                                      ringDisTransform.addChild(ringDisShape); // ring distal
 
-              palmRotateZ.addChild(middleProxTranslate);
-                middleProxTranslate.addChild(middleProx);
-                  middleProx.addChild(middleProxRotateX);
-                    middleProxRotateX.addChild(middleProxRotateZ);
-                      middleProxRotateZ.addChild(middleProxTransform);
-                        middleProxTransform.addChild(middleProxShape); // middle proximal
-                      middleProxRotateZ.addChild(middleMiddleTranslate);
-                        middleMiddleTranslate.addChild(middleMiddle);
-                          middleMiddle.addChild(middleMiddleRotate);
-                            middleMiddleRotate.addChild(middleMiddleTransform);
-                              middleMiddleTransform.addChild(middleMiddleShape); // middle middle
-                            middleMiddleRotate.addChild(middleDisTranslate);
-                              middleDisTranslate.addChild(middleDis);
-                                middleDis.addChild(middleDisRotate);
-                                  middleDisRotate.addChild(middleDisTransform);
-                                    middleDisTransform.addChild(middleDisShape); // middle distal
+                palmRotateZ.addChild(middleProxTranslate);
+                  middleProxTranslate.addChild(middleProx);
+                    middleProx.addChild(middleProxRotateX);
+                      middleProxRotateX.addChild(middleProxRotateZ);
+                        middleProxRotateZ.addChild(middleProxTransform);
+                          middleProxTransform.addChild(middleProxShape); // middle proximal
+                        middleProxRotateZ.addChild(middleMiddleTranslate);
+                          middleMiddleTranslate.addChild(middleMiddle);
+                            middleMiddle.addChild(middleMiddleRotate);
+                              middleMiddleRotate.addChild(middleMiddleTransform);
+                                middleMiddleTransform.addChild(middleMiddleShape); // middle middle
+                              middleMiddleRotate.addChild(middleDisTranslate);
+                                middleDisTranslate.addChild(middleDis);
+                                  middleDis.addChild(middleDisRotate);
+                                    middleDisRotate.addChild(middleDisTransform);
+                                      middleDisTransform.addChild(middleDisShape); // middle distal
 
-              palmRotateZ.addChild(indexProxTranslate);
-                indexProxTranslate.addChild(indexProx);
-                  indexProx.addChild(indexProxRotateX);
-                    indexProxRotateX.addChild(indexProxRotateZ);
-                      indexProxRotateZ.addChild(indexProxTransform);
-                        indexProxTransform.addChild(indexProxShape); // index proximal
-                      indexProxRotateZ.addChild(indexMiddleTranslate);
-                        indexMiddleTranslate.addChild(indexMiddle);
-                          indexMiddle.addChild(indexMiddleRotate);
-                            indexMiddleRotate.addChild(indexMiddleTransform);
-                              indexMiddleTransform.addChild(indexMiddleShape); // index middle
-                            indexMiddleRotate.addChild(indexDisTranslate);
-                              indexDisTranslate.addChild(indexDis);
-                                indexDis.addChild(indexDisRotate);
-                                  indexDisRotate.addChild(indexDisTransform);
-                                    indexDisTransform.addChild(indexDisShape); // index distal
+                palmRotateZ.addChild(indexProxTranslate);
+                  indexProxTranslate.addChild(indexProx);
+                    indexProx.addChild(indexProxRotateX);
+                      indexProxRotateX.addChild(indexProxRotateZ);
+                        indexProxRotateZ.addChild(indexProxTransform);
+                          indexProxTransform.addChild(indexProxShape); // index proximal
+                        indexProxRotateZ.addChild(indexMiddleTranslate);
+                          indexMiddleTranslate.addChild(indexMiddle);
+                            indexMiddle.addChild(indexMiddleRotate);
+                              indexMiddleRotate.addChild(indexMiddleTransform);
+                                indexMiddleTransform.addChild(indexMiddleShape); // index middle
+                              indexMiddleRotate.addChild(indexDisTranslate);
+                                indexDisTranslate.addChild(indexDis);
+                                  indexDis.addChild(indexDisRotate);
+                                    indexDisRotate.addChild(indexDisTransform);
+                                      indexDisTransform.addChild(indexDisShape); // index distal
 
-              palmRotateZ.addChild(thumbProxTranslate);
-                thumbProxTranslate.addChild(thumbProx);
-                  thumbProx.addChild(thumbProxRotateY);
-                    thumbProxRotateY.addChild(thumbProxRotateZ);
-                      thumbProxRotateZ.addChild(thumbProxTransform);
-                        thumbProxTransform.addChild(thumbProxShape); // thumb proximal
-                      thumbProxRotateZ.addChild(thumbMiddleTranslate);
-                        thumbMiddleTranslate.addChild(thumbMiddle);
-                          thumbMiddle.addChild(thumbMiddleRotate);
-                            thumbMiddleRotate.addChild(thumbMiddleTransform);
-                              thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
-                            thumbMiddleRotate.addChild(thumbDisTranslate);
-                              thumbDisTranslate.addChild(thumbDis);
-                                thumbDis.addChild(thumbDisRotate);
-                                  thumbDisRotate.addChild(thumbDisTransform);
-                                    thumbDisTransform.addChild(thumbDisShape); // thumb distal
+                palmRotateZ.addChild(thumbProxTranslate);
+                  thumbProxTranslate.addChild(thumbProx);
+                    thumbProx.addChild(thumbProxRotateY);
+                      thumbProxRotateY.addChild(thumbProxRotateZ);
+                        thumbProxRotateZ.addChild(thumbProxTransform);
+                          thumbProxTransform.addChild(thumbProxShape); // thumb proximal
+                        thumbProxRotateZ.addChild(thumbMiddleTranslate);
+                          thumbMiddleTranslate.addChild(thumbMiddle);
+                            thumbMiddle.addChild(thumbMiddleRotate);
+                              thumbMiddleRotate.addChild(thumbMiddleTransform);
+                                thumbMiddleTransform.addChild(thumbMiddleShape); // thumb middle
+                              thumbMiddleRotate.addChild(thumbDisTranslate);
+                                thumbDisTranslate.addChild(thumbDis);
+                                  thumbDis.addChild(thumbDisRotate);
+                                    thumbDisRotate.addChild(thumbDisTransform);
+                                      thumbDisTransform.addChild(thumbDisShape); // thumb distal
 
 
     hand.update();
@@ -627,6 +642,9 @@ public class Arty_GLEventListener implements GLEventListener {
     
     light.setPosition(getLightPosition());  // changing light position each frame
     light.render(gl);
+
+    light2.setPosition(getLightPosition2());
+    light2.render(gl);
 
     floor.render(gl); 
     
@@ -824,6 +842,9 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.setPerspective(perspective);
     cube.setPerspective(perspective);
     cube2.setPerspective(perspective);
+
+    light2.setPerspective(perspective);
+    sphere2.setPerspective(perspective);
   }
   
   private void disposeMeshes(GL3 gl) {
@@ -832,6 +853,9 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
+
+    light2.dispose(gl);
+    sphere2.dispose(gl);
   }
 
   private void updatePalmZForward() {
@@ -1116,6 +1140,15 @@ public class Arty_GLEventListener implements GLEventListener {
     float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     return new Vec3(x,y,z);   
     // return new Vec3(5f,3.4f,5f);
+  }
+
+  private Vec3 getLightPosition2() {
+    // double elapsedTime = getSeconds()-startTime;
+    // float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
+    // float y = 2.7f;
+    // float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
+    // // return new Vec3(x,y,z);   
+    return new Vec3(5f,3.4f,5f);
   }
   
 }
