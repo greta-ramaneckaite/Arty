@@ -231,6 +231,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private Camera camera;
   private Mat4 perspective;
   private Mesh floor, sphere, cube, cube2, sphere2;
+  private Mesh frontWall, rightWall, leftWall, backWall, ceiling;
   private Light light, light2;
   private SGNode hand;
   
@@ -258,10 +259,25 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId6 = TextureLibrary.loadTexture(gl, "textures/wattBook_specular.jpg");
     int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/jup0vss1.jpg");
     int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/jup0vss1_specular.jpg");
+    int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
+    int[] textureId10 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
+    int[] textureId11 = TextureLibrary.loadTexture(gl, "textures/ceiling.jpg");
     
     // make meshes
-    floor = new TwoTriangles(gl, textureId0);
-    floor.setModelMatrix(Mat4Transform.scale(16,1,16));   
+    floor = new TwoTriangles(gl, textureId9);
+    floor.setModelMatrix(Mat4Transform.scale(16,1,16));
+
+    frontWall = new TwoTriangles(gl, textureId10);
+    frontWall.setModelMatrix(getMforTT2());
+    rightWall = new TwoTriangles(gl, textureId10);
+    rightWall.setModelMatrix(getMforTT4());
+    leftWall = new TwoTriangles(gl, textureId10);
+    leftWall.setModelMatrix(getMforTT3());
+    backWall = new TwoTriangles(gl, textureId10);
+    backWall.setModelMatrix(getMforTT5());
+    ceiling = new TwoTriangles(gl, textureId11);
+    ceiling.setModelMatrix(getMforTT6());
+
     sphere = new Sphere(gl, textureId1, textureId2);
     cube = new Cube(gl, textureId3, textureId4);
     cube2 = new Cube(gl, textureId5, textureId6);
@@ -278,6 +294,17 @@ public class Arty_GLEventListener implements GLEventListener {
     cube.setLight(light2);
     cube2.setLight(light2);
     sphere2.setLight(light2);
+
+    frontWall.setLight(light);
+    frontWall.setCamera(camera);
+    rightWall.setLight(light);
+    rightWall.setCamera(camera);
+    leftWall.setLight(light);
+    leftWall.setCamera(camera);
+    backWall.setLight(light);
+    backWall.setCamera(camera);
+    ceiling.setLight(light);
+    ceiling.setCamera(camera);
 
     
     floor.setLight(light);
@@ -647,6 +674,12 @@ public class Arty_GLEventListener implements GLEventListener {
     light2.render(gl);
 
     floor.render(gl); 
+
+    frontWall.render(gl); 
+    rightWall.render(gl);
+    leftWall.render(gl);
+    backWall.render(gl);
+    ceiling.render(gl);
     
     if (animationIndexX) {
       if (indexX <= 90) {
@@ -845,6 +878,12 @@ public class Arty_GLEventListener implements GLEventListener {
 
     light2.setPerspective(perspective);
     sphere2.setPerspective(perspective);
+
+    frontWall.setPerspective(perspective);
+    rightWall.setPerspective(perspective);
+    leftWall.setPerspective(perspective);
+    backWall.setPerspective(perspective);
+    ceiling.setPerspective(perspective);
   }
   
   private void disposeMeshes(GL3 gl) {
@@ -853,6 +892,12 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
+
+    frontWall.dispose(gl);
+    rightWall.dispose(gl);
+    leftWall.dispose(gl);
+    backWall.dispose(gl);
+    ceiling.dispose(gl);
 
     light2.dispose(gl);
     sphere2.dispose(gl);
@@ -1149,6 +1194,58 @@ public class Arty_GLEventListener implements GLEventListener {
     // float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     // // return new Vec3(x,y,z);   
     return new Vec3(5f,3.4f,5f);
+  }
+
+  private Mat4 getMforTT2() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size*0.5f), model);
+    return model;
+  }
+
+    // left wall
+  private Mat4 getMforTT3() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundY(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), model);
+    model = Mat4.multiply(Mat4Transform.translate(-size*0.5f,size*0.5f,0), model);
+    return model;
+  }
+
+    // right wall
+  private Mat4 getMforTT4() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(size*0.5f,size*0.5f,0), model);
+    return model;
+  }
+
+    // back wall
+  private Mat4 getMforTT5() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundY(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,size*0.5f), model);
+    return model;
+  }
+
+    // ceiling
+  private Mat4 getMforTT6() {
+    float size = 16f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundZ(180), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size,0), model);
+    return model;
   }
   
 }
