@@ -250,7 +250,7 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
-    int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
+    // int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
     int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
     int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/jade_specular.jpg");
     int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
@@ -275,25 +275,25 @@ public class Arty_GLEventListener implements GLEventListener {
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));
 
     backgroundWall = new TwoTriangles(gl, textureId17);
-    backgroundWall.setModelMatrix(getMforTT14());
+    backgroundWall.setModelMatrix(getMforBackgroundWall());
 
     frontWallL = new TwoTriangles(gl, textureId10);
-    frontWallL.setModelMatrix(getMforTT10());
+    frontWallL.setModelMatrix(getMforFrontLeftWall());
     frontWallR = new TwoTriangles(gl, textureId10);
-    frontWallR.setModelMatrix(getMforTT11());
+    frontWallR.setModelMatrix(getMforFrontRightWall());
     frontWallT = new TwoTriangles(gl, textureId10);
-    frontWallT.setModelMatrix(getMforTT12());
+    frontWallT.setModelMatrix(getMforFrontTopWall());
     frontWallB = new TwoTriangles(gl, textureId10);
-    frontWallB.setModelMatrix(getMforTT13());
+    frontWallB.setModelMatrix(getMforFrontBottomWall());
 
     rightWall = new TwoTriangles(gl, textureId12);
-    rightWall.setModelMatrix(getMforTT4());
+    rightWall.setModelMatrix(getMforRightWall());
     leftWall = new TwoTriangles(gl, textureId13);
-    leftWall.setModelMatrix(getMforTT3());
+    leftWall.setModelMatrix(getMforLeftWall());
     backWall = new TwoTriangles(gl, textureId14);
-    backWall.setModelMatrix(getMforTT5());
+    backWall.setModelMatrix(getMforBackWall());
     ceiling = new TwoTriangles(gl, textureId11);
-    ceiling.setModelMatrix(getMforTT6());
+    ceiling.setModelMatrix(getMforCeiling());
 
     sphere = new Sphere(gl, textureId1, textureId2);
     cube = new Cube(gl, textureId15, textureId16);
@@ -1242,7 +1242,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   // front wall left side
-  private Mat4 getMforTT10() {
+  private Mat4 getMforFrontLeftWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size*0.25f,1f,size), model);
@@ -1252,7 +1252,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   // front wall right side
-  private Mat4 getMforTT11() {
+  private Mat4 getMforFrontRightWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size*0.25f,1f,size), model);
@@ -1262,7 +1262,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   // front wall top side
-  private Mat4 getMforTT12() {
+  private Mat4 getMforFrontTopWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size*0.75f,1f,size*0.25f), model);
@@ -1272,7 +1272,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   // front wall bottom side
-  private Mat4 getMforTT13() {
+  private Mat4 getMforFrontBottomWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size*0.75f,1f,size*0.3f), model);
@@ -1282,7 +1282,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   // background image wall
-  private Mat4 getMforTT14() {
+  private Mat4 getMforBackgroundWall() {
     float size = 20f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
@@ -1292,7 +1292,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
     // left wall
-  private Mat4 getMforTT3() {
+  private Mat4 getMforLeftWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
@@ -1303,7 +1303,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
     // right wall
-  private Mat4 getMforTT4() {
+  private Mat4 getMforRightWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
@@ -1314,7 +1314,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
     // back wall
-  private Mat4 getMforTT5() {
+  private Mat4 getMforBackWall() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
@@ -1325,7 +1325,7 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
     // ceiling
-  private Mat4 getMforTT6() {
+  private Mat4 getMforCeiling() {
     float size = 16f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
