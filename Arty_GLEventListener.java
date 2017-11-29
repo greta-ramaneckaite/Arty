@@ -262,18 +262,22 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
     int[] textureId10 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
     int[] textureId11 = TextureLibrary.loadTexture(gl, "textures/ceiling.jpg");
+    int[] textureId12 = TextureLibrary.loadTexture(gl, "textures/wallWithDoor.jpg");
+    int[] textureId13 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting1.jpg");
+    int[] textureId14 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting2.jpg");
+
     
     // make meshes
     floor = new TwoTriangles(gl, textureId9);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));
 
-    frontWall = new TwoTriangles(gl, textureId10);
+    frontWall = new TwoTriangles(gl, textureId12);
     frontWall.setModelMatrix(getMforTT2());
     rightWall = new TwoTriangles(gl, textureId10);
     rightWall.setModelMatrix(getMforTT4());
-    leftWall = new TwoTriangles(gl, textureId10);
+    leftWall = new TwoTriangles(gl, textureId13);
     leftWall.setModelMatrix(getMforTT3());
-    backWall = new TwoTriangles(gl, textureId10);
+    backWall = new TwoTriangles(gl, textureId14);
     backWall.setModelMatrix(getMforTT5());
     ceiling = new TwoTriangles(gl, textureId11);
     ceiling.setModelMatrix(getMforTT6());
