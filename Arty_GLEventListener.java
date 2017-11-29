@@ -265,6 +265,8 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId12 = TextureLibrary.loadTexture(gl, "textures/wallWithDoor.jpg");
     int[] textureId13 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting1.jpg");
     int[] textureId14 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting2.jpg");
+    int[] textureId15 = TextureLibrary.loadTexture(gl, "textures/handTexture.jpg");
+    int[] textureId16 = TextureLibrary.loadTexture(gl, "textures/handTextureSpecular.jpg");
 
     
     // make meshes
@@ -283,9 +285,10 @@ public class Arty_GLEventListener implements GLEventListener {
     ceiling.setModelMatrix(getMforTT6());
 
     sphere = new Sphere(gl, textureId1, textureId2);
-    cube = new Cube(gl, textureId3, textureId4);
+    cube = new Cube(gl, textureId15, textureId16);
     cube2 = new Cube(gl, textureId5, textureId6);
     sphere2 = new Sphere(gl, textureId7, textureId8);
+    // cube3 = new Cube(gl, textureId15, textureId16);
 
     light = new Light(gl);
     light.setCamera(camera);
