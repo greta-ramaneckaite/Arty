@@ -260,7 +260,7 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId7 = TextureLibrary.loadTexture(gl, "textures/jup0vss1.jpg");
     int[] textureId8 = TextureLibrary.loadTexture(gl, "textures/jup0vss1_specular.jpg");
     int[] textureId9 = TextureLibrary.loadTexture(gl, "textures/floor.jpg");
-    int[] textureId10 = TextureLibrary.loadTexture(gl, "textures/wall.jpg");
+    int[] textureId10 = TextureLibrary.loadTexture(gl, "textures/windowWall.jpg");
     int[] textureId11 = TextureLibrary.loadTexture(gl, "textures/ceiling.jpg");
     int[] textureId12 = TextureLibrary.loadTexture(gl, "textures/wallWithDoor.jpg");
     int[] textureId13 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting1.jpg");
