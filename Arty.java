@@ -67,42 +67,6 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("DO CUSTOM");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("rotate wrist");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("rotate palm z");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("index rotate x");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("index rotate z");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("middle rotate x");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("middle rotate z");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("ring rotate x");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("ring rotate z");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("pinky rotate x");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("pinky rotate z");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("thumb rotate y");
-      b.addActionListener(this);
-      p.add(b);
-      b = new JButton("thumb rotate z");
-      b.addActionListener(this);
-      p.add(b);
     this.add(p, BorderLayout.SOUTH);
     
     addWindowListener(new WindowAdapter() {
@@ -143,42 +107,6 @@ public class Arty extends JFrame implements ActionListener {
     }
     else if (e.getActionCommand().equalsIgnoreCase("DO CUSTOM")) {
       glEventListener.doCustom();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("rotate wrist")) {
-      glEventListener.doG();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("rotate palm z")) {
-      glEventListener.rotatePalmZ();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("index rotate x")) {
-      glEventListener.rotateIndexX();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("index rotate z")) {
-      glEventListener.rotateIndexZ();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("middle rotate x")) {
-      glEventListener.rotateMiddleX();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("middle rotate z")) {
-      glEventListener.rotateMiddleZ();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("ring rotate x")) {
-      glEventListener.rotateRingX();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("ring rotate z")) {
-      glEventListener.rotateRingZ();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("pinky rotate x")) {
-      glEventListener.rotatePinkyX();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("pinky rotate z")) {
-      glEventListener.rotatePinkyZ();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("thumb rotate y")) {
-      glEventListener.rotateThumbY();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("thumb rotate z")) {
-      glEventListener.rotateThumbZ();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);

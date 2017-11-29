@@ -92,8 +92,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private double savedTime = 0;
    
   public void startAnimation() {
-    animation = true;
-    startTime = getSeconds()-savedTime;
+    
   }
    
   public void stopAnimation() {
@@ -144,8 +143,10 @@ public class Arty_GLEventListener implements GLEventListener {
   }
 
   public void doCustom() {
+    rotateIndexZ();
     rotateRingX();
     rotateMiddleX();
+    rotatePinkyZ();
     rotateThumbY();
   }
   
@@ -250,7 +251,6 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
-    // int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/chequerboard.jpg");
     int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/jade.jpg");
     int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/jade_specular.jpg");
     int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
