@@ -231,7 +231,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private Camera camera;
   private Mat4 perspective;
   private Mesh floor, sphere, cube, cube2, sphere2;
-  private Mesh frontWallL, frontWallR, frontWallT, frontWallB, rightWall, leftWall, backWall, ceiling;
+  private Mesh frontWallL, frontWallR, frontWallT, frontWallB, rightWall, leftWall, backWall, ceiling, backgroundWall;
   private Light light, light2;
   private SGNode hand;
   
@@ -267,11 +267,15 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId14 = TextureLibrary.loadTexture(gl, "textures/wallWithPainting2.jpg");
     int[] textureId15 = TextureLibrary.loadTexture(gl, "textures/handTexture.jpg");
     int[] textureId16 = TextureLibrary.loadTexture(gl, "textures/handTextureSpecular.jpg");
+    int[] textureId17 = TextureLibrary.loadTexture(gl, "textures/backgroundWall.jpg");
 
     
     // make meshes
     floor = new TwoTriangles(gl, textureId9);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));
+
+    backgroundWall = new TwoTriangles(gl, textureId17);
+    backgroundWall.setModelMatrix(getMforTT14());
 
     frontWallL = new TwoTriangles(gl, textureId10);
     frontWallL.setModelMatrix(getMforTT10());
@@ -307,6 +311,9 @@ public class Arty_GLEventListener implements GLEventListener {
     cube.setLight(light2);
     cube2.setLight(light2);
     sphere2.setLight(light2);
+
+    backgroundWall.setLight(light);
+    backgroundWall.setCamera(camera);
 
     frontWallL.setLight(light);
     frontWallL.setCamera(camera);
@@ -693,7 +700,9 @@ public class Arty_GLEventListener implements GLEventListener {
     light2.setPosition(getLightPosition2());
     light2.render(gl);
 
-    floor.render(gl); 
+    floor.render(gl);
+
+    backgroundWall.render(gl);
 
     frontWallL.render(gl);
     frontWallR.render(gl);
@@ -903,6 +912,8 @@ public class Arty_GLEventListener implements GLEventListener {
     light2.setPerspective(perspective);
     sphere2.setPerspective(perspective);
 
+    backgroundWall.setPerspective(perspective);
+
     frontWallL.setPerspective(perspective);
     frontWallR.setPerspective(perspective);
     frontWallT.setPerspective(perspective);
@@ -920,6 +931,8 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.dispose(gl);
     cube.dispose(gl);
     cube2.dispose(gl);
+
+    backgroundWall.dispose(gl);
 
     frontWallL.dispose(gl);
     frontWallR.dispose(gl);
@@ -1265,6 +1278,16 @@ public class Arty_GLEventListener implements GLEventListener {
     model = Mat4.multiply(Mat4Transform.scale(size*0.75f,1f,size*0.3f), model);
     model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
     model = Mat4.multiply(Mat4Transform.translate(0,size*0.15f,-size*0.5f), model);
+    return model;
+  }
+
+  // background image wall
+  private Mat4 getMforTT14() {
+    float size = 20f;
+    Mat4 model = new Mat4(1);
+    model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
+    model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size), model);
     return model;
   }
 
