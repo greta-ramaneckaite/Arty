@@ -8,6 +8,14 @@ import com.jogamp.opengl.util.awt.*;
 import com.jogamp.opengl.util.glsl.*;
   
 public class Arty_GLEventListener implements GLEventListener {
+
+  private boolean animation = false;
+  private boolean animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false, animationThumbY = false;
+  private boolean animationIndexZ = false, animationMiddleZ = false, animationRingZ = false, animationPinkyZ = false, animationThumbZ = false;
+  private boolean animationPalmZ = false, animationIndexZInvert = false, animationMiddleXBack = false;
+  private double savedTime = 0;
+
+
   
   private static final boolean DISPLAY_SHADERS = false;
   private float aspect;
@@ -85,37 +93,17 @@ public class Arty_GLEventListener implements GLEventListener {
    *
    */
    
-  private boolean animation = false;
-  private boolean animationIndexX = false, animationMiddleX = false, animationRingX = false, animationPinkyX = false, animationThumbY = false;
-  private boolean animationIndexZ = false, animationMiddleZ = false, animationRingZ = false, animationPinkyZ = false, animationThumbZ = false;
-  private boolean animationPalmZ = false, animationIndexZInvert = false, animationMiddleXBack = false;
-  private double savedTime = 0;
-   
   public void startAnimation() {
-    
+    doG();
+    doR();
+    doE();
+    doCustom();
   }
    
   public void stopAnimation() {
     animation = false;
     double elapsedTime = getSeconds()-startTime;
     savedTime = elapsedTime;
-  }
-   
-  public void incXPosition() {
-    xPosition += 0.5f;
-    if (xPosition>5f) xPosition = 5f;
-    updateMove();
-  }
-   
-  public void decXPosition() {
-    xPosition -= 0.5f;
-    if (xPosition<-5f) xPosition = -5f;
-    updateMove();
-  }
- 
-  private void updateMove() {
-    handMoveTranslate.setTransform(Mat4Transform.translate(xPosition,0,0));
-    handMoveTranslate.update();
   }
 
   public void doG() {
@@ -149,14 +137,7 @@ public class Arty_GLEventListener implements GLEventListener {
     rotatePinkyZ();
     rotateThumbY();
   }
-  
-  public void rotateWrist() {
-    stopAnimation();
-    yPosition += 10;
-    wristRotation.setTransform(Mat4Transform.rotateAroundY(yPosition));
-    wristRotation.update();
-  }
-   
+
   public void rotatePalmZ() {
     animationPalmZ = true;
     if (palmZ >= 180) palmZ = 0;    
@@ -225,8 +206,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
   // ***************************************************
   /* THE SCENE
-   * Now define all the methods to handle the scene.
-   * This will be added to in later examples.
+   * Define all the methods to handle the scene.
    */
 
   private Camera camera;
@@ -269,14 +249,20 @@ public class Arty_GLEventListener implements GLEventListener {
     int[] textureId16 = TextureLibrary.loadTexture(gl, "textures/handTextureSpecular.jpg");
     int[] textureId17 = TextureLibrary.loadTexture(gl, "textures/backgroundWall.jpg");
 
-    
-    // make meshes
+    /* ---------------------------------------------------------------------------
+
+      Texturing
+
+    ----------------------------------------------------------------------------*/
+
     floor = new TwoTriangles(gl, textureId9);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));
 
     backgroundWall = new TwoTriangles(gl, textureId17);
     backgroundWall.setModelMatrix(getMforBackgroundWall());
 
+
+    // Split front wall to have a window
     frontWallL = new TwoTriangles(gl, textureId10);
     frontWallL.setModelMatrix(getMforFrontLeftWall());
     frontWallR = new TwoTriangles(gl, textureId10);
@@ -299,6 +285,14 @@ public class Arty_GLEventListener implements GLEventListener {
     cube = new Cube(gl, textureId15, textureId16);
     cube2 = new Cube(gl, textureId5, textureId6);
     sphere2 = new Sphere(gl, textureId7, textureId8);
+
+    
+
+    /* ---------------------------------------------------------------------------
+
+      Lighting and camera
+
+    ----------------------------------------------------------------------------*/
 
     light = new Light(gl);
     light.setCamera(camera);
@@ -416,6 +410,12 @@ public class Arty_GLEventListener implements GLEventListener {
     float ringRHeight = 0.3f;
     float ringRWidth = 0.9f;
     float ringRDepth = 0.9f;
+
+  /* ---------------------------------------------------------------------------
+
+    Initialisation of each finger bits
+
+  ----------------------------------------------------------------------------*/
 
     // wrist
     Mat4 m = Mat4Transform.scale(wristWidth,wristHeight,wristDepth);
@@ -580,6 +580,12 @@ public class Arty_GLEventListener implements GLEventListener {
 
     thumbDisRotate = new TransformNode("thumb distal rotate",Mat4Transform.rotateAroundY(0));
 
+  /* ---------------------------------------------------------------------------
+
+    Hierarchy tree for the hand
+
+  ----------------------------------------------------------------------------*/
+
 
     hand.addChild(wrist);
       wrist.addChild(wristRotation);
@@ -689,6 +695,13 @@ public class Arty_GLEventListener implements GLEventListener {
   private int indexXcount = 0, middleXcount = 0, ringXcount = 0, pinkyXcount = 0, thumbYcount = 0;
   private int indexZcount = 0, middleZcount = 0, ringZcount = 0, pinkyZcount = 0, thumbZcount = 0, indexZcountInvert = 0;
   private int middleXcountBack = 0;
+
+
+   /* ---------------------------------------------------------------------------
+
+    Rendering and animation to and back position
+
+  ----------------------------------------------------------------------------*/
  
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -899,6 +912,12 @@ public class Arty_GLEventListener implements GLEventListener {
 
     hand.draw(gl);
   }
+
+   /* ---------------------------------------------------------------------------
+
+    Update perspective
+
+  ----------------------------------------------------------------------------*/
     
   private void updatePerspectiveMatrices() {
     // needs to be changed if user resizes the window
@@ -924,6 +943,12 @@ public class Arty_GLEventListener implements GLEventListener {
     backWall.setPerspective(perspective);
     ceiling.setPerspective(perspective);
   }
+
+   /* ---------------------------------------------------------------------------
+
+    Mesh dispose
+
+  ----------------------------------------------------------------------------*/
   
   private void disposeMeshes(GL3 gl) {
     light.dispose(gl);
@@ -947,6 +972,12 @@ public class Arty_GLEventListener implements GLEventListener {
     light2.dispose(gl);
     sphere2.dispose(gl);
   }
+
+  /* ----------------------------------------------------------
+  
+    Animations for each finger and palm movement
+
+  ---------------------------------------------------------- */
 
   private void updatePalmZForward() {
     palmZ += 1;
@@ -1222,7 +1253,7 @@ public class Arty_GLEventListener implements GLEventListener {
     }
   }
   
-  // The light's postion is continually being changed, so needs to be calculated for each frame.
+  // Light position
   private Vec3 getLightPosition() {
     double elapsedTime = getSeconds()-startTime;
     float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
@@ -1240,6 +1271,13 @@ public class Arty_GLEventListener implements GLEventListener {
     // // return new Vec3(x,y,z);   
     return new Vec3(5f,3.4f,5f);
   }
+
+  /* ---------------------------------------------------------------------------
+
+    Position of all walls and ceiling of the room
+
+  ----------------------------------------------------------------------------*/
+
 
   // front wall left side
   private Mat4 getMforFrontLeftWall() {
