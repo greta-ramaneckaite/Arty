@@ -213,7 +213,7 @@ public class Arty_GLEventListener implements GLEventListener {
   private Mat4 perspective;
   private Mesh floor, sphere, cube, cube2, sphere2;
   private Mesh frontWallL, frontWallR, frontWallT, frontWallB, rightWall, leftWall, backWall, ceiling, backgroundWall;
-  private Light light, light2;
+  private Light light;
   private SGNode hand;
   
   private float xPosition = 0;
@@ -297,15 +297,6 @@ public class Arty_GLEventListener implements GLEventListener {
     light = new Light(gl);
     light.setCamera(camera);
 
-    light2 = new Light(gl);
-    light2.setCamera(camera);
-
-    floor.setLight(light2);
-    sphere.setLight(light2);
-    cube.setLight(light2);
-    cube2.setLight(light2);
-    sphere2.setLight(light2);
-
     backgroundWall.setLight(light);
     backgroundWall.setCamera(camera);
 
@@ -327,7 +318,6 @@ public class Arty_GLEventListener implements GLEventListener {
     ceiling.setLight(light);
     ceiling.setCamera(camera);
 
-    
     floor.setLight(light);
     floor.setCamera(camera);
     sphere.setLight(light);
@@ -710,9 +700,6 @@ public class Arty_GLEventListener implements GLEventListener {
     light.setPosition(getLightPosition());  // changing light position each frame
     light.render(gl);
 
-    light2.setPosition(getLightPosition2());
-    light2.render(gl);
-
     floor.render(gl);
 
     backgroundWall.render(gl);
@@ -927,8 +914,6 @@ public class Arty_GLEventListener implements GLEventListener {
     sphere.setPerspective(perspective);
     cube.setPerspective(perspective);
     cube2.setPerspective(perspective);
-
-    light2.setPerspective(perspective);
     sphere2.setPerspective(perspective);
 
     backgroundWall.setPerspective(perspective);
@@ -969,7 +954,6 @@ public class Arty_GLEventListener implements GLEventListener {
     backWall.dispose(gl);
     ceiling.dispose(gl);
 
-    light2.dispose(gl);
     sphere2.dispose(gl);
   }
 
@@ -1261,15 +1245,6 @@ public class Arty_GLEventListener implements GLEventListener {
     float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
     return new Vec3(x,y,z);   
     // return new Vec3(5f,3.4f,5f);
-  }
-
-  private Vec3 getLightPosition2() {
-    // double elapsedTime = getSeconds()-startTime;
-    // float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
-    // float y = 2.7f;
-    // float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
-    // // return new Vec3(x,y,z);   
-    return new Vec3(5f,3.4f,5f);
   }
 
   /* ---------------------------------------------------------------------------
