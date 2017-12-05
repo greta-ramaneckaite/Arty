@@ -1317,11 +1317,11 @@ public class Arty_GLEventListener implements GLEventListener {
 
   // background image wall
   private Mat4 getMforBackgroundWall() {
-    float size = 20f;
+    float size = 25f;
     Mat4 model = new Mat4(1);
     model = Mat4.multiply(Mat4Transform.scale(size,1f,size), model);
     model = Mat4.multiply(Mat4Transform.rotateAroundX(90), model);
-    model = Mat4.multiply(Mat4Transform.translate(0,size*0.5f,-size), model);
+    model = Mat4.multiply(Mat4Transform.translate(0,size*0.2f,-size), model);
     return model;
   }
 
