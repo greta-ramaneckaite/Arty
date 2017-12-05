@@ -92,14 +92,17 @@ public class Arty_GLEventListener implements GLEventListener {
    *
    *
    */
-   
+  
+
+  // This does not work properly, all gestures are displayed at the same time
   public void startAnimation() {
     doG();
     doR();
     doE();
     doCustom();
   }
-   
+  
+  // This does not work either, since it doesn not control anything related to the hand 
   public void stopAnimation() {
     animation = false;
     double elapsedTime = getSeconds()-startTime;
